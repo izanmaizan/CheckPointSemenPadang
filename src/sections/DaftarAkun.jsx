@@ -71,11 +71,15 @@ const DaftarAkun = () => {
   const fetchAkunList = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/users",
+        {
+          // const response = await axios.get("http://localhost:3000/users", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
       if (Array.isArray(response.data)) {
         setAkunList(response.data);
       } else {
@@ -108,11 +112,15 @@ const DaftarAkun = () => {
   const handleDelete = async () => {
     try {
       // Gunakan username sebagai parameter URL
-      await axios.delete(`http://localhost:3000/delete-user/${itemToDelete}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+      await axios.delete(
+        `https://backend-cpsp.vercel.app/delete-user/${itemToDelete}`,
+        {
+          // await axios.delete(`http://localhost:3000/delete-user/${itemToDelete}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
       handleSuccess();
     } catch (error) {
       console.error("Gagal menghapus akun:", error);
