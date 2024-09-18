@@ -35,7 +35,8 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -119,15 +120,20 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
 
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:3000/update-akun/${username}`, {
-          username,
-          password,
-          name,
-          role,
-        });
+        await axios.put(
+          `https://backend-cpsp.vercel.app/update-akun/${username}`,
+          {
+            // await axios.put(`http://localhost:3000/update-akun/${username}`, {
+            username,
+            password,
+            name,
+            role,
+          }
+        );
         alert("User updated successfully!");
       } else {
-        await axios.post("http://localhost:3000/register", {
+        await axios.post("https://backend-cpsp.vercel.app/register", {
+          // await axios.post("http://localhost:3000/register", {
           username,
           password,
           confirmPassword,

@@ -21,8 +21,9 @@ const Daftar = () => {
       return;
     } else {
       try {
-        await axios.post("http://localhost:3000/register", {
-          // await axios.post("https://nicfit-backend.vercel.app/register", { //ini untuk deploy
+        await axios.post("https://backend-cpsp.vercel.app/register", {
+          //ini untuk deploy
+          // await axios.post("http://localhost:3000/register", {
           username: username,
           email: email,
           password: password,

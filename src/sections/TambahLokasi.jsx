@@ -32,7 +32,8 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -81,13 +82,18 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
     try {
       if (isEditing) {
         // Update existing location
-        await axios.put(`http://localhost:3000/titiklokasi/${idLokasi}`, {
-          lokasi,
-        });
+        await axios.put(
+          `https://backend-cpsp.vercel.app/titiklokasi/${idLokasi}`,
+          {
+            // await axios.put(`http://localhost:3000/titiklokasi/${idLokasi}`, {
+            lokasi,
+          }
+        );
         alert("Lokasi updated successfully!");
       } else {
         // Add new location
-        await axios.post("http://localhost:3000/titiklokasi", {
+        await axios.post("https://backend-cpsp.vercel.app/titiklokasi", {
+          // await axios.post("http://localhost:3000/titiklokasi", {
           id_lokasi: idLokasi,
           lokasi: lokasi,
         });

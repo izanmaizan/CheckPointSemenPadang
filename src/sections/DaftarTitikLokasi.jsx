@@ -46,7 +46,8 @@ const DaftarTitikLokasi = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -79,7 +80,8 @@ const DaftarTitikLokasi = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/lokasi-with-details"
+        "https://backend-cpsp.vercel.app/lokasi-with-details"
+        // "http://localhost:3000/lokasi-with-details"
       );
       console.log(response.data); // Tambahkan log ini untuk memeriksa struktur data
       if (Array.isArray(response.data)) {
@@ -114,9 +116,15 @@ const DaftarTitikLokasi = () => {
   const handleDelete = async () => {
     try {
       if (deleteType === "lokasi") {
-        await axios.delete(`http://localhost:3000/titiklokasi/${itemToDelete}`);
+        await axios.delete(
+          `https://backend-cpsp.vercel.app/titiklokasi/${itemToDelete}`
+        );
+        // await axios.delete(`http://localhost:3000/titiklokasi/${itemToDelete}`);
       } else if (deleteType === "petugas") {
-        await axios.delete(`http://localhost:3000/petugas/${itemToDelete}`);
+        await axios.delete(
+          `https://backend-cpsp.vercel.app/petugas/${itemToDelete}`
+        );
+        // await axios.delete(`http://localhost:3000/petugas/${itemToDelete}`);
       }
       handleSuccess();
     } catch (error) {

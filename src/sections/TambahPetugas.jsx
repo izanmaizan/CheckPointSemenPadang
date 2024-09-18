@@ -39,7 +39,8 @@ const TambahPetugas = ({
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -83,7 +84,10 @@ const TambahPetugas = ({
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/titiklokasi");
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/titiklokasi"
+      );
+      // const response = await axios.get("http://localhost:3000/titiklokasi");
       setLocations(response.data);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -136,13 +140,18 @@ const TambahPetugas = ({
       if (isEdit) {
         // Edit existing petugas
         await axios.put(
-          `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
+          `https://backend-cpsp.vercel.app/petugas/${petugasToEdit.id_petugas}`,
+          // `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
         alert("Petugas edited successfully!");
       } else {
         // Add new petugas
-        await axios.post("http://localhost:3000/petugas", petugasData);
+        await axios.post(
+          "https://backend-cpsp.vercel.app/petugas",
+          petugasData
+        );
+        // await axios.post("http://localhost:3000/petugas", petugasData);
         alert("Petugas added successfully!");
       }
 

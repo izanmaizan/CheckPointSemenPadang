@@ -32,11 +32,15 @@ const CheckPoint = () => {
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/titiklokasi", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/titiklokasi",
+        {
+          // const response = await axios.get("http://localhost:3000/titiklokasi", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
       setLocations(
         response.data.map((loc) => ({
           value: loc.id_lokasi,
@@ -51,7 +55,8 @@ const CheckPoint = () => {
   const fetchPetugasByLocation = async (id_lokasi) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/petugas/${id_lokasi}`, // Corrected URL
+        `https://backend-cpsp.vercel.app/petugas/${id_lokasi}`, // Corrected URL
+        // `http://localhost:3000/petugas/${id_lokasi}`, // Corrected URL
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -160,7 +165,8 @@ const CheckPoint = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/checkpoints",
+        "https://backend-cpsp.vercel.app/checkpoints",
+        // "http://localhost:3000/checkpoints",
         formData,
         {
           headers: {

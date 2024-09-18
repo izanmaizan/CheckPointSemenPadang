@@ -31,7 +31,8 @@ const TitikLokasi = () => {
 
   const fetchUsername = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -46,7 +47,10 @@ const TitikLokasi = () => {
 
   const fetchTitikLokasi = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/titiklokasi");
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/titiklokasi"
+      );
+      // const response = await axios.get("http://localhost:3000/titiklokasi");
       setTitikLokasiList(response.data);
     } catch (error) {
       console.error("Error fetching titik lokasi: " + error);
@@ -74,8 +78,10 @@ const TitikLokasi = () => {
     try {
       const method = isEditing ? "PUT" : "POST";
       const url = isEditing
-        ? `http://localhost:3000/titiklokasi/${editId}`
-        : "http://localhost:3000/titiklokasi";
+        ? `https://backend-cpsp.vercel.app/titiklokasi/${editId}`
+        : // ? `http://localhost:3000/titiklokasi/${editId}`
+          "https://backend-cpsp.vercel.app/titiklokasi";
+      // : "http://localhost:3000/titiklokasi";
 
       const response = await fetch(url, {
         method: method,
@@ -120,7 +126,10 @@ const TitikLokasi = () => {
   const confirmDelete = async () => {
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:3000/titiklokasi/${deleteId}`);
+      await axios.delete(
+        `https://backend-cpsp.vercel.app/titiklokasi/${deleteId}`
+      );
+      // await axios.delete(`http://localhost:3000/titiklokasi/${deleteId}`);
       setMsg("Titik Lokasi deleted successfully!");
       setShowModal(true);
       fetchTitikLokasi();
@@ -153,7 +162,8 @@ const TitikLokasi = () => {
   const checkIdLokasiExistence = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/titiklokasi/${id}`
+        `https://backend-cpsp.vercel.app/titiklokasi/${id}`
+        // `http://localhost:3000/titiklokasi/${id}`
       );
       if (response.data) {
         setMsg("ID Lokasi sudah ada!");

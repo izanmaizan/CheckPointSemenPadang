@@ -20,8 +20,8 @@ const Nav = () => {
 
   const fetchName = async () => {
     try {
-      // const response = await axios.get("http://localhost:3000/me", {
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -50,7 +50,7 @@ const Nav = () => {
       <nav className="max-w-screen-xl mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <img
-          src="/public/assets/logo_ptsp.png"
+          src="./../../public/assets/Logo_ptsp.png"
           alt="logo"
           className="w-32 h-10 sm:w-32 sm:h-10" // Adjusted size for mobile and larger screens
         />

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Beranda = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [role, setRole] = useState(""); 
+  const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,7 +26,8 @@ const Beranda = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

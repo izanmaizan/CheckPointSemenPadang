@@ -39,7 +39,8 @@ const Laporan = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+        // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -77,11 +78,15 @@ const Laporan = () => {
   const fetchReportData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/laporan", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/laporan",
+        {
+          // const response = await axios.get("http://localhost:3000/laporan", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
@@ -94,11 +99,15 @@ const Laporan = () => {
   // Fungsi untuk mengambil data lokasi dari endpoint
   const fetchLocations = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/titiklokasi", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+      const response = await axios.get(
+        "https://backend-cpsp.vercel.app/titiklokasi",
+        {
+          // const response = await axios.get("http://localhost:3000/titiklokasi", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
       setLocations(response.data); // Menyimpan data lokasi yang diterima ke state
     } catch (error) {
       console.error("Error fetching locations: " + error);

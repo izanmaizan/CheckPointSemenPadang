@@ -23,13 +23,15 @@ const Login = () => {
     } else {
       try {
         // server public
-        // const response = await axios.post("https://nicfit-backend.vercel.app/login", {
-
-        // server local
-        const response = await axios.post("http://localhost:3000/login", {
-          username: username,
-          password: password,
-        });
+        const response = await axios.post(
+          "https://backend-cpsp.vercel.app/login",
+          {
+            // server local
+            // const response = await axios.post("http://localhost:3000/login", {
+            username: username,
+            password: password,
+          }
+        );
 
         const { accessToken } = response.data;
         localStorage.setItem("refresh_token", accessToken);
