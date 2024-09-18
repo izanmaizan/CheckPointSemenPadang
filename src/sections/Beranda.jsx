@@ -1,0 +1,144 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const Beranda = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState(""); 
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (refreshToken) {
+      fetchUserData();
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const fetchUserData = async () => {
+    try {
+      const timeout = setTimeout(() => {
+        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+        setLoading(false);
+      }, 10000);
+
+      const response = await axios.get("http://localhost:3000/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
+
+      clearTimeout(timeout);
+      const data = response.data;
+      setUsername(data.username);
+      setRole(data.role); // Simpan role yang diterima dari backend
+      localStorage.setItem("username", data.username);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user data: " + error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="relative min-h-screen flex flex-col items-center justify-center">
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute w-[400px] h-[400px] sm:w-[700px] sm:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] sm:right-[-100px] sm:top-[-420px]"></div>
+      </div>
+      <section className="relative w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-center items-center space-y-8">
+        {loading ? (
+          <div className="text-center">
+            <p className="text-gray-600 mb-4">Loading...</p>
+            <div className="loader border-t-4 border-[#155E75] rounded-full w-12 h-12 animate-spin mx-auto mb-4"></div>
+            {errorMessage && (
+              <div>
+                <p className="text-red-500 mb-4">{errorMessage}</p>
+                <Link
+                  to="/login"
+                  className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-2 transition-all">
+                  Kembali ke Login
+                </Link>
+              </div>
+            )}
+          </div>
+        ) : username ? (
+          <>
+            <div className="w-full text-left">
+              <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
+                Selamat Datang di{" "}
+                <span className="text-4xl sm:text-5xl">Aplikasi</span>
+              </h1>
+
+              <p className="text-[#155E75] text-xl sm:text-2xl pt-8">
+                Cek Poin adalah memastikan barang sampai pada tujuan
+              </p>
+            </div>
+
+            <div className="w-full max-w-4xl">
+              <iframe
+                className="w-full h-64 md:h-96"
+                src="https://www.youtube.com/embed/hDepAm-sDGA"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Video Semen Padang"></iframe>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-lg text-center mt-8">
+              {role === "admin" ? (
+                <>
+                  <Link to="/laporan">
+                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
+                      Laporan
+                    </button>
+                  </Link>
+                  <Link to="/daftarlokasi">
+                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
+                      Master Petugas
+                    </button>
+                  </Link>
+                  <Link to="/daftarakun">
+                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
+                      Daftar Akun
+                    </button>
+                  </Link>
+                </>
+              ) : role === "user" ? (
+                <>
+                  <Link to="/check-point">
+                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
+                      Check Point
+                    </button>
+                  </Link>
+                  <Link to="/geofence">
+                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
+                      Tambah Geofence
+                    </button>
+                  </Link>
+                </>
+              ) : null}
+            </div>
+          </>
+        ) : (
+          <div className="text-center">
+            <p className="text-red-600 font-bold mb-4">
+              Terjadi kesalahan, mohon login kembali.
+            </p>
+            <Link
+              to="/login"
+              className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-2 transition-all">
+              Kembali ke Login
+            </Link>
+          </div>
+        )}
+      </section>
+    </main>
+  );
+};
+
+export default Beranda;
