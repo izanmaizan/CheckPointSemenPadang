@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "../index.css";
 import axios from "axios";
-import { logo } from "./../../public/assets/Logo_ptsp.png;";
+import logo from "./../../public/assets/Logo_ptsp.png;";
 
 const Nav = () => {
   const navigate = useNavigate();
