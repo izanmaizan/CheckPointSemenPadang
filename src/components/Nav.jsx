@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "../index.css";
 import axios from "axios";
-import logo from "./../../public/assets/Logo_ptsp.png;";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -51,7 +50,7 @@ const Nav = () => {
       <nav className="max-w-screen-xl mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <img
-          src={logo}
+          src="../assets/Logo_ptsp.png"
           alt="logo"
           className="w-32 h-10 sm:w-32 sm:h-10" // Adjusted size for mobile and larger screens
         />
