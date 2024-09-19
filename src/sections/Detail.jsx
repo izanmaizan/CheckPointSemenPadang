@@ -32,7 +32,7 @@ const Detail = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      const response = await axios.get("http://193.203.162.80:3000/me", {
         // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -65,7 +65,7 @@ const Detail = () => {
   const fetchDetailData = async () => {
     try {
       const response = await axios.get(
-        `https://backend-cpsp.vercel.app/detail/${no_do}`,
+        `http://193.203.162.80:3000/detail/${no_do}`,
         // `http://localhost:3000/detail/${no_do}`,
         {
           headers: {
@@ -113,7 +113,7 @@ const Detail = () => {
   const handleSave = async () => {
     try {
       await axios.put(
-        `https://backend-cpsp.vercel.app/detail/${no_do}`,
+        `http://193.203.162.80:3000/detail/${no_do}`,
         detailData,
         {
           // await axios.put(`http://localhost:3000/detail/${no_do}`, detailData, {
@@ -132,7 +132,7 @@ const Detail = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://backend-cpsp.vercel.app/detail/${no_do}`, {
+      await axios.delete(`http://193.203.162.80:3000/detail/${no_do}`, {
         // await axios.delete(`http://localhost:3000/detail/${no_do}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,

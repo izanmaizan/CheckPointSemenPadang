@@ -33,7 +33,7 @@ const CheckPoint = () => {
   const fetchLocations = async () => {
     try {
       const response = await axios.get(
-        "https://backend-cpsp.vercel.app/titiklokasi",
+        "http://193.203.162.80:3000/titiklokasi",
         {
           // const response = await axios.get("http://localhost:3000/titiklokasi", {
           headers: {
@@ -55,7 +55,7 @@ const CheckPoint = () => {
   const fetchPetugasByLocation = async (id_lokasi) => {
     try {
       const response = await axios.get(
-        `https://backend-cpsp.vercel.app/petugas/${id_lokasi}`, // Corrected URL
+        `http://193.203.162.80:3000/petugas/${id_lokasi}`, // Corrected URL
         // `http://localhost:3000/petugas/${id_lokasi}`, // Corrected URL
         {
           headers: {
@@ -165,7 +165,7 @@ const CheckPoint = () => {
       }
 
       const response = await axios.post(
-        "https://backend-cpsp.vercel.app/checkpoints",
+        "http://193.203.162.80:3000/checkpoints",
         // "http://localhost:3000/checkpoints",
         formData,
         {

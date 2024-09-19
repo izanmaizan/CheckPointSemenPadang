@@ -39,7 +39,7 @@ const Laporan = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      const response = await axios.get("http://193.203.162.80:3000/me", {
         // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -79,7 +79,7 @@ const Laporan = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "https://backend-cpsp.vercel.app/laporan",
+        "http://193.203.162.80:3000/laporan",
         {
           // const response = await axios.get("http://localhost:3000/laporan", {
           headers: {
@@ -100,7 +100,7 @@ const Laporan = () => {
   const fetchLocations = async () => {
     try {
       const response = await axios.get(
-        "https://backend-cpsp.vercel.app/titiklokasi",
+        "http://193.203.162.80:3000/titiklokasi",
         {
           // const response = await axios.get("http://localhost:3000/titiklokasi", {
           headers: {
