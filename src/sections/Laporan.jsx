@@ -246,7 +246,8 @@ const Laporan = () => {
           <div className="absolute w-[400px] h-[400px] sm:w-[1000px] sm:h-[1000px] rounded-full bg-[#0E7490] top-[-280px] right-[-220px] sm:right-[-350px] sm:-top-[830px]"></div>
         </div>
         <h1 className="text-[40px] font-semibold mb-5 text-[#155E75] font-Roboto">
-          <div>Laporan Check Point</div>
+          <div>Laporan</div>
+          <div>Check Point</div>
         </h1>
 
         <div className="mb-4 flex flex-col md:flex-row justify-between items-center mx-5 gap-2">
