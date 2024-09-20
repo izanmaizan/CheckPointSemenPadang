@@ -285,7 +285,8 @@ const Laporan = () => {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            <span>&gt;</span>
+            <span>ke</span>
+            {/* <span>&gt;</span> */}
             <input
               type="date"
               className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
@@ -356,7 +357,7 @@ const Laporan = () => {
                     <button
                       onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
                       className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                      Details
+                      Detail
                     </button>
                   </td>
                 </tr>
