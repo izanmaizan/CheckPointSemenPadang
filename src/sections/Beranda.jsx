@@ -49,7 +49,7 @@ const Beranda = () => {
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute w-[400px] h-[400px] sm:w-[700px] sm:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] sm:right-[-100px] sm:top-[-420px]"></div>
+        <div className="absolute w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] md:right-[-100px] md:top-[-420px]"></div>
       </div>
       <section className="relative w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-center items-center space-y-8">
         {loading ? (
