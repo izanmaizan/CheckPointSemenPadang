@@ -8,6 +8,7 @@ const Beranda = () => {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -46,6 +47,19 @@ const Beranda = () => {
     }
   };
 
+  // Teks singkat (sebagian) dan teks lengkap
+  const shortText = "Check Point adalah proses pemeriksaan yang dilakukan di titik atau lokasi tertentu sebelum barang sampai pada tujuan.";
+  const fullText = `Check Point adalah proses pemeriksaan yang dilakukan di titik
+  atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
+  melakukan Check Point, petugas memeriksa surat perintah jalan,
+  kondisi barang dan truk untuk memastikan keamanan dan
+  kelengkapan dalam pengiriman.`;
+
+  // Fungsi untuk toggle teks
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0 overflow-hidden -z-10">
@@ -69,23 +83,31 @@ const Beranda = () => {
           </div>
         ) : username ? (
           <>
-            <div className="w-full text-left">
-              <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
-                Selamat Datang di{" "}
-                <span className="text-4xl sm:text-5xl">CPSP</span>
-              </h1>
-              <h3 className="text-base sm:text-base font-bold text-[#155E75] mb-4">
-                Layanan Operasional Transportasi
-              </h3>
+            
+    <div className="w-full text-left">
+      <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
+        Selamat Datang di <span className="text-4xl sm:text-5xl">CPSP</span>
+      </h1>
+      <h3 className="text-base sm:text-base font-bold text-[#155E75] mb-4">
+        Layanan Operasional Transportasi
+      </h3>
 
-              <p className="text-[#155E75] text-xl sm:text-2xl pt-4 w-10/12">
-              Check Point adalah proses pemeriksaan yang dilakukan di titik
-                atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
-                melakukan Check Point, petugas memeriksa surat perintah jalan,
-                kondisi barang dan truk untuk memastikan keamanan dan
-                kelengkapan dalam pengiriman.
-              </p>
-            </div>
+      {/* Paragraf yang bisa disingkat di mobile */}
+      <p className="text-[#155E75] text-xl sm:text-2xl pt-4 w-10/12">
+        {/* Tampilkan teks sesuai dengan kondisi */}
+        {isExpanded || window.innerWidth >= 640 ? fullText : shortText}
+      </p>
+
+      {/* Tombol "Lanjutkan" hanya muncul di mobile */}
+      {window.innerWidth < 640 && (
+        <button
+          onClick={toggleText}
+          className="text-[#155E75] font-bold underline mt-2 sm:hidden"
+        >
+          {isExpanded ? "Sembunyikan" : "Lanjutkan"}
+        </button>
+      )}
+    </div>
 
             <div className="w-full max-w-4xl">
               <iframe
