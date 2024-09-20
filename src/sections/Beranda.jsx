@@ -72,11 +72,18 @@ const Beranda = () => {
             <div className="w-full text-left">
               <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
                 Selamat Datang di{" "}
-                <span className="text-4xl sm:text-5xl">Aplikasi</span>
+                <span className="text-4xl sm:text-5xl">CPSP</span>
               </h1>
+              <h3 className="text-base sm:text-base font-bold text-[#155E75] mb-4">
+                Layanan Operasional Transportasi
+              </h3>
 
               <p className="text-[#155E75] text-xl sm:text-2xl pt-4 w-10/12">
-              Check Point adalah proses pemeriksaan yang dilakukan di titik tertentu sebelum pengiriman barang oleh PT Semen Padang. Petugas memeriksa surat perintah jalan dan kondisi truk untuk memastikan keamanan dan kelengkapan pengiriman.
+              Check Point adalah proses pemeriksaan yang dilakukan di titik
+                atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
+                melakukan Check Point, petugas memeriksa surat perintah jalan,
+                kondisi barang dan truk untuk memastikan keamanan dan
+                kelengkapan dalam pengiriman.
               </p>
             </div>
 
