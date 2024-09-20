@@ -42,7 +42,8 @@ const App = () => {
         </main>
         <footer className="bg-[#155E75] h-12 w-full flex items-center justify-center text-white">
           {/* Konten Footer */}
-          <p>© 2024 Aplikasi Cek Poin. All rights reserved.</p>
+          <p>© 2024 CheckPoint Operasional Transportasi. All rights reserved.</p>
+          {/* created by: Maizan Insani Akbar and Amim Febriza  */}
         </footer>
       </div>
     </Router>

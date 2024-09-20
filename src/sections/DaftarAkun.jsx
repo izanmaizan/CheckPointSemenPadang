@@ -194,10 +194,10 @@ const DaftarAkun = () => {
                   Username
                 </th>
                 <th className="px-4 md:px-6 py-2 md:py-3 border-b border-[#155E75]">
-                  Name
+                  Nama
                 </th>
                 <th className="px-4 md:px-6 py-2 md:py-3 border-b border-[#155E75]">
-                  Role
+                  Peran
                 </th>
                 <th className="px-4 md:px-6 py-2 md:py-3 border-b border-[#155E75]">
                   Aksi
@@ -222,7 +222,7 @@ const DaftarAkun = () => {
                         <button
                           onClick={() => handleEditAkun(akun)}
                           className="text-blue-600 hover:underline">
-                          Edit
+                          Ubah
                         </button>
                         <button
                           onClick={() => handleConfirmDelete(akun.username)}

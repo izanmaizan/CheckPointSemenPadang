@@ -91,7 +91,7 @@ const TambahPetugas = ({
       setLocations(response.data);
     } catch (error) {
       console.error("Error fetching locations:", error);
-      alert("Failed to fetch locations.");
+      alert("Gagal memuat lokasi.");
     }
   };
 
@@ -119,7 +119,7 @@ const TambahPetugas = ({
     e.preventDefault();
 
     if (!selectedLocation) {
-      setError("Please select a location.");
+      setError("Tolong pilih lokasi.");
       return;
     }
 
@@ -127,7 +127,7 @@ const TambahPetugas = ({
       (item) => !item.id_petugas || !item.nama_petugas || !item.no_hp
     );
     if (emptyFields) {
-      setError("Please fill out all petugas fields.");
+      setError("Silahkan isi semua kolom petugas.");
       return;
     }
 
@@ -144,7 +144,7 @@ const TambahPetugas = ({
           // `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
-        alert("Petugas edited successfully!");
+        alert("Petugas berhasil diperbarui!");
       } else {
         // Add new petugas
         await axios.post(
@@ -152,14 +152,14 @@ const TambahPetugas = ({
           petugasData
         );
         // await axios.post("http://localhost:3000/petugas", petugasData);
-        alert("Petugas added successfully!");
+        alert("Petugas berhasil ditambahkan!");
       }
 
       onSuccess(); // Notify parent component
       onClose();
     } catch (error) {
       console.error(`Error ${isEdit ? "editing" : "adding"} petugas:`, error);
-      alert(`Failed to ${isEdit ? "edit" : "add"} petugas.`);
+      alert(`Gagal untuk ${isEdit ? "Ubah" : "Tambahkan"} petugas.`);
     }
   };
 
@@ -183,7 +183,7 @@ const TambahPetugas = ({
       <div
         className="bg-white rounded-lg p-6 max-w-lg mx-auto overflow-auto"
         style={{ maxHeight: "80vh" }}>
-        <h2 className="text-xl font-bold mb-4 text-[#155E75]">
+        <h2 className="text-2xl font-extrabold mb-4 text-[#155E75] font-Roboto">
           {isEdit ? "Edit Petugas" : "Tambah Petugas"}
         </h2>
         <form onSubmit={handleSubmit}>
@@ -245,7 +245,7 @@ const TambahPetugas = ({
                   type="button"
                   onClick={() => handleRemovePetugas(index)}
                   className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-                  Remove
+                  Hapus
                 </button>
               )}
             </div>
@@ -255,20 +255,20 @@ const TambahPetugas = ({
               type="button"
               onClick={handleAddPetugas}
               className="bg-[#0c647a] mb-4 hover:bg-blue-700bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              Add More Petugas
+              Tambah lagi Petugas
             </button>
           )}
           <div className="flex space-x-4">
             <button
               type="submit"
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              {isEdit ? "Save Changes" : "Add Petugas"}
+              {isEdit ? "Simpan Perubahan" : "Simpan Petugas"}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              Cancel
+              Batal
             </button>
           </div>
         </form>

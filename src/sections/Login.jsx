@@ -44,7 +44,7 @@ const Login = () => {
         } else if (error.response.status === 404) {
           setMsg("Username belum terdaftar"); // Menampilkan pesan jika username belum terdaftar
         } else {
-          setMsg("Error logging in");
+          setMsg("Gagal untuk Login");
         }
       } finally {
         setIsLoading(false); // Mengakhiri proses loading setelah selesai

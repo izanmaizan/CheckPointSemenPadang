@@ -99,7 +99,7 @@ const TambahGeofence = () => {
       navigate("/");
     } catch (error) {
       console.error("Error adding geofence:", error);
-      alert("Failed to add geofence.");
+      alert("Gagal untuk menambahkan Geofence.");
     }
   };
 

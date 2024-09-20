@@ -130,6 +130,11 @@ const DaftarTitikLokasi = () => {
     } catch (error) {
       console.error(`Gagal menghapus ${deleteType}:`, error);
       alert(`Gagal menghapus ${deleteType}.`);
+      if (deleteType === "Lokasi") {
+        alert(`Gagal menghapus ${deleteType} dikarenakan masih terhubung dengan geofence dan petugas.`)
+      } else if (deleteType === "petugas") {
+        alert(`Gagal menghapus ${deleteType}.`)
+      }
     } finally {
       setShowConfirmDelete(false);
       setItemToDelete(null);
@@ -334,7 +339,7 @@ const DaftarTitikLokasi = () => {
                             <button
                               onClick={() => handleEditLokasi(loc)}
                               className="text-blue-600 hover:underline">
-                              Edit
+                              Ubah
                             </button>
                             <button
                               onClick={() =>
@@ -376,7 +381,7 @@ const DaftarTitikLokasi = () => {
                                 handleEditPetugas(petugas[0].id_petugas)
                               }
                               className="text-blue-600 hover:underline">
-                              Edit
+                              Ubah
                             </button>
                             <button
                               onClick={() =>
@@ -399,20 +404,12 @@ const DaftarTitikLokasi = () => {
                           <td className="px-4 md:px-6 py-2 md:py-4 border-b border-[#155E75]">
                             {p.no_hp}
                           </td>
-                          {/* <td className="px-4 md:px-6 py-2 md:py-4 text-center border-b border-[#155E75]">
-                            {loc.geofence && loc.geofence.geofence_data
-                              ? loc.geofence.geofence_data
-                              : "-"}
-                          </td>
-                          <td className="px-4 md:px-6 py-2 md:py-4 text-center border-b border-[#155E75]">
-                            {loc.geofence ? loc.geofence.alamat : "-"}
-                          </td> */}
                           <td className="px-4 md:px-6 py-2 md:py-4 border-b border-[#155E75]">
                             <div className="flex space-x-2">
                               <button
                                 onClick={() => handleEditPetugas(p.id_petugas)}
                                 className="text-blue-600 hover:underline">
-                                Edit
+                                Ubah
                               </button>
                               <button
                                 onClick={() =>
@@ -436,7 +433,7 @@ const DaftarTitikLokasi = () => {
                           <button
                             onClick={() => handleEditLokasi(loc)}
                             className="text-blue-600 hover:underline">
-                            Edit
+                            Ubah
                           </button>
                           <button
                             onClick={() =>

@@ -58,7 +58,7 @@ const Nav = () => {
         {/* Hanya tampil jika isAuthenticated */}
         {isAuthenticated && (
           <>
-            <h1 className="text-xl text-[#A5F3FC] font-Roboto">Halo, {name}</h1>
+            <h1 className="text-xl text-[#A5F3FC] font-Roboto">Halo, {name}!</h1>
             {/* Menu for Desktop */}
             <ul className="hidden lg:flex gap-8 items-center text-white bg-[#0c647a] hover:bg-[#0e7490] px-4 py-2 rounded">
               <li>

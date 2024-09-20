@@ -316,7 +316,7 @@ const Detail = () => {
             <button
               onClick={handleEdit}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition mr-1">
-              Edit
+              Ubah
             </button>
           </>
         )}
@@ -351,7 +351,7 @@ const Detail = () => {
                 controls
                 className="w-full h-auto max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-4xl">
                 <source src={previewUrl} type="video/mp4" />
-                Your browser does not support the video tag.
+                Browser Anda tidak mendukung tag vidio.
               </video>
             )}
           </div>

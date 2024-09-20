@@ -125,16 +125,17 @@ const CheckPoint = () => {
       !jam ||
       !noDO
     ) {
-      setMsg("Please fill in all required fields");
+      setMsg("Silahkan isi semua kolom.");
       setShowModal(true);
       return;
     }
 
-    console.log("Selected Location:", selectedLocation); // Tambahkan ini untuk debugging
-    console.log(
-      "Nama Petugas:",
-      selectedPetugas.map((p) => p.value).join(", ")
-    );
+    // Tambahkan ini untuk debugging
+    // console.log("Selected Location:", selectedLocation); 
+    // console.log(
+    //   "Nama Petugas:",
+    //   selectedPetugas.map((p) => p.value).join(", ")
+    // );
 
     setLoading(true);
 
@@ -145,8 +146,7 @@ const CheckPoint = () => {
         selectedPetugas.map((p) => p.value).join(", ")
       );
 
-      formData.append("no_hp", noHp.join(", ")); // Include no_hp in the form data
-      // Pastikan bahwa kita mengakses nilai objek yang tepat untuk `titik_lokasi`
+      formData.append("no_hp", noHp.join(", "));
       formData.append(
         "titik_lokasi",
         selectedLocation ? selectedLocation.label : ""
@@ -212,7 +212,7 @@ const CheckPoint = () => {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <p className="text-center text-gray-800">
-              Uploading files, please wait...
+              Mengunggah media, mohon tunggu...
             </p>
           </div>
         </div>
@@ -339,8 +339,8 @@ const CheckPoint = () => {
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah files</span>
-                    <span>{dokumentasiPreview.length} files selected</span>
+                    <span>Tambah media</span>
+                    <span>{dokumentasiPreview.length} media dipilih</span>
                   </label>
                 </div>
 
@@ -404,11 +404,11 @@ const CheckPoint = () => {
                   </button>
                 </Link>
               </div>
-              {/* {msg && (
+              {msg && (
                 <div className="mt-6">
                   <p className="text-center text-red-500">{msg}</p>
                 </div>
-              )} */}
+              )}
             </form>
           </div>
         </div>

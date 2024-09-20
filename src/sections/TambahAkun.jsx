@@ -109,12 +109,12 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!username || !password || !confirmPassword || !name) {
-      setError("Please fill out all fields.");
+      setError("Silahkan isi semua kolom.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("Password tidak sama.");
       return;
     }
 
@@ -130,7 +130,7 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
             role,
           }
         );
-        alert("User updated successfully!");
+        alert("User berhasil diperbarui!");
       } else {
         await axios.post("http://193.203.162.80:3000/register", {
           // await axios.post("http://localhost:3000/register", {
@@ -140,13 +140,13 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
           name,
           role,
         });
-        alert("User added successfully!");
+        alert("User berhasil ditambahkan!");
       }
       onSuccess(); // Notify parent component
       onClose();
     } catch (error) {
       console.error("Error saving user:", error);
-      alert(`Failed to ${isEditing ? "update" : "add"} user.`);
+      alert(`Gagal untuk ${isEditing ? "Perbarui" : "Tambahkan"} user.`);
     }
   };
 
@@ -154,7 +154,7 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
         <h2 className="text-2xl font-extrabold mb-4 text-gray-900">
-          {isEditing ? "Edit User" : "Add User"}
+          {isEditing ? "Ubah User" : "Tambah User"}
         </h2>
         <form onSubmit={handleSubmit}>
           {error && <p className="text-red-600 mb-4">{error}</p>}
@@ -173,7 +173,7 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-gray-700" htmlFor="name">
-              Name
+              Nama Lengkap
             </label>
             <input
               id="name"
@@ -224,7 +224,7 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
             <label
               className="block mb-2 text-gray-700"
               htmlFor="confirmPassword">
-              Confirm Password
+              Konfirmasi Password
             </label>
             <input
               id="confirmPassword"
@@ -247,20 +247,20 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
                 password === confirmPassword ? "text-green-600" : "text-red-600"
               }`}>
               {password === confirmPassword
-                ? "Passwords match."
-                : "Passwords do not match."}
+                ? "Password sama."
+                : "Password tidak sama."}
             </p>
           )}
           <div className="mb-4">
             <label className="block mb-2 text-gray-700" htmlFor="role">
-              Role
+              Peran
             </label>
             <select
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="border border-gray-300 px-4 py-2 w-full rounded-lg">
-              <option value="user">User</option>
+              <option value="petugas">Petugas</option>
               <option value="admin">Admin</option>
             </select>
           </div>
@@ -268,13 +268,13 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
             <button
               type="submit"
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              {isEditing ? "Update" : "Add"} User
+              {isEditing ? "Perbarui" : "Tambah"} User
             </button>
             <button
               type="button"
               onClick={onClose}
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              Cancel
+              Batal
             </button>
           </div>
         </form>

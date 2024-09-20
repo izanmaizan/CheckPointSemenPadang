@@ -399,7 +399,7 @@ const Laporan = () => {
               <button
                 onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
                 className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                Details
+                Detail
               </button>
             </div>
           ))}
@@ -441,7 +441,7 @@ const Laporan = () => {
 
           {/* Page Info */}
           <div className="text-gray-700">
-            Page {currentPage} of {totalPages}
+            Halaman {currentPage} dari {totalPages}
           </div>
         </div>
       </div>

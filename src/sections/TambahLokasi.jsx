@@ -75,7 +75,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!idLokasi || !lokasi) {
-      setError("Please fill out all fields.");
+      setError("Silahkan isi semua kolom.");
       return;
     }
 
@@ -89,7 +89,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
             lokasi,
           }
         );
-        alert("Lokasi updated successfully!");
+        alert("Lokasi berhasil di Perbarui!");
       } else {
         // Add new location
         await axios.post("http://193.203.162.80:3000/titiklokasi", {
@@ -97,7 +97,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
           id_lokasi: idLokasi,
           lokasi: lokasi,
         });
-        alert("Lokasi added successfully!");
+        alert("Lokasi berhasil ditambahkan!");
       }
       onSuccess(); // Notify parent component
       onClose();
@@ -125,7 +125,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
       )}
 
       <div className="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-extrabold mb-4 text-gray-900">
+        <h2 className="text-2xl font-extrabold mb-4 text-[#155E75] font-Roboto">
           {isEditing ? "Edit Lokasi" : "Tambah Lokasi"}
         </h2>
         <form onSubmit={handleSubmit}>
@@ -159,13 +159,13 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
             <button
               type="submit"
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              {isEditing ? "Update" : "Add"} Lokasi
+              {isEditing ? "Perbarui" : "Tambah"} Lokasi
             </button>
             <button
               type="button"
               onClick={onClose}
               className="bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
-              Cancel
+              Batal
             </button>
           </div>
         </form>
