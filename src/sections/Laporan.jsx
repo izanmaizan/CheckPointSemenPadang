@@ -39,8 +39,8 @@ const Laporan = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://193.203.162.80:3000/me", {
-        // const response = await axios.get("http://localhost:3000/me", {
+      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -78,15 +78,14 @@ const Laporan = () => {
   const fetchReportData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://193.203.162.80:3000/laporan",
-        {
-          // const response = await axios.get("http://localhost:3000/laporan", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-          },
-        }
-      );
+      // const response = await axios.get(
+      //   "https://backend-cpsp.vercel.app/laporan",
+      //   {
+      const response = await axios.get("http://localhost:3000/laporan", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
@@ -99,15 +98,14 @@ const Laporan = () => {
   // Fungsi untuk mengambil data lokasi dari endpoint
   const fetchLocations = async () => {
     try {
-      const response = await axios.get(
-        "http://193.203.162.80:3000/titiklokasi",
-        {
-          // const response = await axios.get("http://localhost:3000/titiklokasi", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-          },
-        }
-      );
+      // const response = await axios.get(
+      //   "https://backend-cpsp.vercel.app/titiklokasi",
+      //   {
+      const response = await axios.get("http://localhost:3000/titiklokasi", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
       setLocations(response.data); // Menyimpan data lokasi yang diterima ke state
     } catch (error) {
       console.error("Error fetching locations: " + error);
@@ -246,8 +244,8 @@ const Laporan = () => {
           <div className="absolute w-[400px] h-[400px] sm:w-[1000px] sm:h-[1000px] rounded-full bg-[#0E7490] top-[-280px] right-[-220px] sm:right-[-350px] sm:-top-[830px]"></div>
         </div>
         <h1 className="text-[40px] font-semibold mb-5 text-[#155E75] font-Roboto">
-          <div>Laporan</div>
-          <div>Check Point</div>
+          <div>Laporan Check</div>
+          <div>Point Harian</div>
         </h1>
 
         <div className="mb-4 flex flex-col md:flex-row justify-between items-center mx-5 gap-2">
@@ -285,8 +283,7 @@ const Laporan = () => {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            <span>ke</span>
-            {/* <span>&gt;</span> */}
+            <span>&gt;</span>
             <input
               type="date"
               className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
@@ -325,6 +322,18 @@ const Laporan = () => {
                   No. DO
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
+                  No Truck / Gerbong
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
+                  Nama Pengemudi
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
+                  Distributor
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
+                  Ekspeditur
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
                   Tanggal
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
@@ -348,6 +357,18 @@ const Laporan = () => {
                     {item.no_do}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                    {item.no_truck}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                    {item.nama_pengemudi}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                    {item.distributor}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                    {item.ekspeditur}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                     {item.tanggal}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -357,7 +378,7 @@ const Laporan = () => {
                     <button
                       onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
                       className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                      Detail
+                      Details
                     </button>
                   </td>
                 </tr>
@@ -388,6 +409,26 @@ const Laporan = () => {
               </div>
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                <span className="font-semibold">No Truck / Gerbong:</span>
+                <span>{item.no_truck}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                <span className="font-semibold">Nama Pengemudi:</span>
+                <span>{item.nama_pengemudi}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                <span className="font-semibold">Distributor:</span>
+                <span>{item.distributor}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                <span className="font-semibold">Ekspeditur:</span>
+                <span>{item.ekspeditur}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
                 <span className="font-semibold">Tanggal:</span>
                 <span>{item.tanggal}</span>
               </div>
@@ -400,7 +441,7 @@ const Laporan = () => {
               <button
                 onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
                 className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                Detail
+                Details
               </button>
             </div>
           ))}
@@ -442,7 +483,7 @@ const Laporan = () => {
 
           {/* Page Info */}
           <div className="text-gray-700">
-            Halaman {currentPage} dari {totalPages}
+            Page {currentPage} of {totalPages}
           </div>
         </div>
       </div>

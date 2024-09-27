@@ -16,9 +16,19 @@ const CheckPoint = () => {
   const [dokumentasi, setDokumentasi] = useState([]);
   const [dokumentasiPreview, setDokumentasiPreview] = useState([]);
   const [keterangan, setKeterangan] = useState("");
+  const [namaPengemudi, setNamaPengemudi] = useState("");
+  const [noTruck, setNoTruck] = useState("");
+  const [distributor, setDistributor] = useState("");
+  const [ekspeditur, setEkspeditur] = useState("");
   const [msg, setMsg] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+    address: "",
+  });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -30,17 +40,59 @@ const CheckPoint = () => {
     }
   }, [navigate]);
 
-  const fetchLocations = async () => {
-    try {
-      const response = await axios.get(
-        "http://193.203.162.80:3000/titiklokasi",
+  useEffect(() => {
+    let watchId;
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(
+        async (position) => {
+          const latitude = position.coords.latitude.toFixed(8);
+          const longitude = position.coords.longitude.toFixed(8);
+
+          // Memperbarui lokasi dengan latitude dan longitude
+          setLocation((prevLocation) => ({
+            latitude,
+            longitude,
+            address: prevLocation.address,
+          }));
+
+          // Memanggil fungsi untuk mendapatkan alamat
+          await fetchAddressFromCoordinates(latitude, longitude);
+        },
+        (error) => {
+          setLocation({
+            latitude: null,
+            longitude: null,
+            error: error.message,
+          });
+        },
         {
-          // const response = await axios.get("http://localhost:3000/titiklokasi", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-          },
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
         }
       );
+    } else {
+      setLocation({
+        latitude: null,
+        longitude: null,
+        error: "Geolocation is not supported by this browser.",
+      });
+    }
+
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/titiklokasi", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
       setLocations(
         response.data.map((loc) => ({
           value: loc.id_lokasi,
@@ -48,15 +100,14 @@ const CheckPoint = () => {
         }))
       );
     } catch (error) {
-      console.error("Error fetching locations: " + error);
+      console.error("Error fetching locations: ", error);
     }
   };
 
   const fetchPetugasByLocation = async (id_lokasi) => {
     try {
       const response = await axios.get(
-        `http://193.203.162.80:3000/petugas/${id_lokasi}`, // Corrected URL
-        // `http://localhost:3000/petugas/${id_lokasi}`, // Corrected URL
+        `http://localhost:3000/petugas/${id_lokasi}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -65,7 +116,7 @@ const CheckPoint = () => {
       );
       setSuggestedPetugas(response.data);
     } catch (error) {
-      console.error("Error fetching petugas: " + error);
+      console.error("Error fetching petugas: ", error);
     }
   };
 
@@ -76,8 +127,6 @@ const CheckPoint = () => {
 
   const handlePetugasChange = (selectedOptions) => {
     setSelectedPetugas(selectedOptions);
-
-    // Update No. HP based on the selected petugas
     const selectedNoHp = selectedOptions.map((option) => {
       const petugas = suggestedPetugas.find(
         (p) => p.nama_petugas === option.value
@@ -89,9 +138,16 @@ const CheckPoint = () => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+
+    // Menyimpan dokumentasi asli
     setDokumentasi(files);
 
-    const filePreviews = files.map((file) => URL.createObjectURL(file));
+    // Membuat pratinjau untuk gambar dan video
+    const filePreviews = files.map((file) => ({
+      url: URL.createObjectURL(file),
+      type: file.type, // Menyimpan tipe file (image/video)
+    }));
+
     setDokumentasiPreview(filePreviews);
   };
 
@@ -115,6 +171,27 @@ const CheckPoint = () => {
     setKeterangan("");
   };
 
+  // Mengupdate fungsi untuk mendapatkan alamat dan lokasi
+  const fetchAddressFromCoordinates = async (latitude, longitude) => {
+    try {
+      // Menjalankan pengambilan alamat bersamaan dengan update lokasi
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+
+      // Memperbarui alamat jika data berhasil diambil
+      if (response.data && response.data.display_name) {
+        setLocation((prevLocation) => ({
+          ...prevLocation,
+          address: response.data.display_name,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching address:", error);
+      setMsg("Gagal mendapatkan alamat, silakan coba lagi.");
+    }
+  };
+
   const handleCheckPoint = async (e) => {
     e.preventDefault();
 
@@ -123,19 +200,23 @@ const CheckPoint = () => {
       !selectedPetugas.length ||
       !tanggal ||
       !jam ||
-      !noDO
+      !noDO ||
+      !namaPengemudi ||
+      !noTruck ||
+      !distributor ||
+      !ekspeditur
     ) {
-      setMsg("Silahkan isi semua kolom.");
+      setMsg("Harap lengkapi semua field yang diperlukan");
       setShowModal(true);
       return;
     }
 
-    // Tambahkan ini untuk debugging
-    // console.log("Selected Location:", selectedLocation); 
-    // console.log(
-    //   "Nama Petugas:",
-    //   selectedPetugas.map((p) => p.value).join(", ")
-    // );
+    // Cek apakah lokasi sudah aktif
+    if (!location.latitude || !location.longitude || !location.address) {
+      setMsg("Harap aktifkan izin lokasi di perangkat Anda dan coba lagi.");
+      setShowModal(true);
+      return;
+    }
 
     setLoading(true);
 
@@ -145,28 +226,29 @@ const CheckPoint = () => {
         "nama_petugas",
         selectedPetugas.map((p) => p.value).join(", ")
       );
-
       formData.append("no_hp", noHp.join(", "));
-      formData.append(
-        "titik_lokasi",
-        selectedLocation ? selectedLocation.label : ""
-      );
-
+      formData.append("titik_lokasi", selectedLocation.label);
+      formData.append("alamat", location.address);
       formData.append("tanggal", tanggal);
       formData.append("jam", jam);
       formData.append("no_do", noDO);
+      formData.append("nama_pengemudi", namaPengemudi);
+      formData.append("no_truck", noTruck);
+      formData.append("distributor", distributor);
+      formData.append("ekspeditur", ekspeditur);
       formData.append("keterangan", keterangan);
 
-      // Append files if any
       if (dokumentasi.length > 0) {
         dokumentasi.forEach((file) => {
-          formData.append(`dokumentasi`, file);
+          formData.append("dokumentasi", file);
         });
       }
 
+      const geofenceData = `${location.latitude},${location.longitude}`;
+      formData.append("geofence_data", geofenceData);
+
       const response = await axios.post(
-        "http://193.203.162.80:3000/checkpoints",
-        // "http://localhost:3000/checkpoints",
+        "http://localhost:3000/checkpoints",
         formData,
         {
           headers: {
@@ -187,7 +269,41 @@ const CheckPoint = () => {
     }
   };
 
-  const closeModal = () => setShowModal(false);
+  const handleModalOk = () => {
+    setShowModal(false);
+
+    // Periksa kembali lokasi jika sudah diperbarui
+    if (location.latitude && location.longitude) {
+      fetchAddressFromCoordinates(location.latitude, location.longitude);
+    } else {
+      // Jika lokasi masih tidak ada, coba lagi untuk mendapatkan lokasi
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude.toFixed(8);
+            const longitude = position.coords.longitude.toFixed(8);
+            setLocation({
+              latitude,
+              longitude,
+              address: "",
+            });
+            fetchAddressFromCoordinates(latitude, longitude);
+          },
+          (error) => {
+            setMsg("Tidak dapat mengakses lokasi: " + error.message);
+            setShowModal(true);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          }
+        );
+      }
+    }
+  };
+
+  // const closeModal = () => setShowModal(false);
 
   return (
     <section className="px-5 py-20 h-full w-full">
@@ -198,10 +314,15 @@ const CheckPoint = () => {
             <p className="text-center text-gray-800">{msg}</p>
             <div className="mt-4 flex justify-center">
               <button
-                onClick={closeModal}
+                onClick={handleModalOk} // Ubah ini untuk meminta akses lokasi lagi
                 className="bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
                 OK
               </button>
+              {/* <button
+                onClick={closeModal}
+                className="ml-2 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+                Batal
+              </button> */}
             </div>
           </div>
         </div>
@@ -212,7 +333,7 @@ const CheckPoint = () => {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <p className="text-center text-gray-800">
-              Mengunggah media, mohon tunggu...
+              Uploading files, please wait...
             </p>
           </div>
         </div>
@@ -312,6 +433,7 @@ const CheckPoint = () => {
                   Jam
                 </label>
               </div>
+
               <div className="relative mb-6">
                 <input
                   type="text"
@@ -326,6 +448,67 @@ const CheckPoint = () => {
                   No. DO
                 </label>
               </div>
+
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  id="input-no-do"
+                  className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border-2 placeholder-shown:border-[#737373] placeholder-shown:border-t-[#737373] border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-[#737373] focus:border-[#737373]"
+                  placeholder=" "
+                  required
+                  value={namaPengemudi}
+                  onChange={(e) => setNamaPengemudi(e.target.value)}
+                />
+                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-[#737373] leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-[#737373] transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-[#737373] peer-focus:text-[#737373] before:border-[#737373] peer-focus:before:border-[#737373] after:border-[#737373] peer-focus:after:border-[#737373]">
+                  Nama Pengemudi
+                </label>
+              </div>
+
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  id="input-no-do"
+                  className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border-2 placeholder-shown:border-[#737373] placeholder-shown:border-t-[#737373] border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-[#737373] focus:border-[#737373]"
+                  placeholder=" "
+                  required
+                  value={noTruck}
+                  onChange={(e) => setNoTruck(e.target.value)}
+                />
+                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-[#737373] leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-[#737373] transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-[#737373] peer-focus:text-[#737373] before:border-[#737373] peer-focus:before:border-[#737373] after:border-[#737373] peer-focus:after:border-[#737373]">
+                  No Truck / Gerbong
+                </label>
+              </div>
+
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  id="input-no-do"
+                  className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border-2 placeholder-shown:border-[#737373] placeholder-shown:border-t-[#737373] border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-[#737373] focus:border-[#737373]"
+                  placeholder=" "
+                  required
+                  value={distributor}
+                  onChange={(e) => setDistributor(e.target.value)}
+                />
+                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-[#737373] leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-[#737373] transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-[#737373] peer-focus:text-[#737373] before:border-[#737373] peer-focus:before:border-[#737373] after:border-[#737373] peer-focus:after:border-[#737373]">
+                  Distributor
+                </label>
+              </div>
+
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  id="input-no-do"
+                  className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border-2 placeholder-shown:border-[#737373] placeholder-shown:border-t-[#737373] border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-[#737373] focus:border-[#737373]"
+                  placeholder=" "
+                  required
+                  value={ekspeditur}
+                  onChange={(e) => setEkspeditur(e.target.value)}
+                />
+                <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-[#737373] leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-[#737373] transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-[#737373] peer-focus:text-[#737373] before:border-[#737373] peer-focus:before:border-[#737373] after:border-[#737373] peer-focus:after:border-[#737373]">
+                  Ekspeditur
+                </label>
+              </div>
+
               <div className="relative mb-6">
                 {/* File Input */}
                 <div className="relative">
@@ -339,8 +522,8 @@ const CheckPoint = () => {
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah media</span>
-                    <span>{dokumentasiPreview.length} media dipilih</span>
+                    <span>Tambah files</span>
+                    <span>{dokumentasiPreview.length} files selected</span>
                   </label>
                 </div>
 
@@ -349,11 +532,20 @@ const CheckPoint = () => {
                   <div className="grid grid-cols-3 gap-4 mt-4">
                     {dokumentasiPreview.map((preview, index) => (
                       <div key={index} className="relative">
-                        <img
-                          src={preview}
-                          alt={`preview-${index}`}
-                          className="w-full h-full object-cover rounded-md border border-[#737373]"
-                        />
+                        {preview.type.startsWith("image/") ? (
+                          <img
+                            src={preview.url}
+                            alt={`preview-${index}`}
+                            className="w-full h-full object-cover rounded-md border border-[#737373]"
+                          />
+                        ) : (
+                          <video
+                            controls
+                            className="w-full h-full object-cover rounded-md border border-[#737373]">
+                            <source src={preview.url} type={preview.type} />
+                            Your browser does not support the video tag.
+                          </video>
+                        )}
                         <button
                           type="button"
                           className="absolute top-1 right-1 bg-[#0E7490] text-white rounded-full p-1"
@@ -383,7 +575,7 @@ const CheckPoint = () => {
                   className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border-2 placeholder-shown:border-[#737373] placeholder-shown:border-t-[#737373] border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px]  resize-none"
                   placeholder=" "
                   rows={2}
-                  required
+                  // required
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}
                 />
@@ -413,6 +605,19 @@ const CheckPoint = () => {
           </div>
         </div>
       </div>
+
+      {/* <div>
+        <h1>Real-Time User Location</h1>
+        {location.latitude && location.longitude ? (
+          <div>
+            <p>Latitude: {location.latitude}</p>
+            <p>Longitude: {location.longitude}</p>
+            <p>Address: {location.address}</p>
+          </div>
+        ) : (
+          <p>{location.error ? location.error : "Fetching location..."}</p>
+        )}
+      </div> */}
     </section>
   );
 };

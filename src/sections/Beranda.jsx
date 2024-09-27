@@ -8,7 +8,6 @@ const Beranda = () => {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -27,8 +26,8 @@ const Beranda = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://193.203.162.80:3000/me", {
-        // const response = await axios.get("http://localhost:3000/me", {
+      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -47,25 +46,12 @@ const Beranda = () => {
     }
   };
 
-  // Teks singkat (sebagian) dan teks lengkap
-  const shortText = "Check Point adalah proses pemeriksaan yang dilakukan di titik atau lokasi tertentu sebelum barang sampai pada tujuan.";
-  const fullText = `Check Point adalah proses pemeriksaan yang dilakukan di titik
-  atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
-  melakukan Check Point, petugas memeriksa surat perintah jalan,
-  kondisi barang dan truk untuk memastikan keamanan dan
-  kelengkapan dalam pengiriman.`;
-
-  // Fungsi untuk toggle teks
-  const toggleText = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] md:right-[-100px] md:top-[-420px]"></div>
+        <div className="absolute w-[400px] h-[400px] sm:w-[700px] sm:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] sm:right-[-100px] sm:top-[-420px]"></div>
       </div>
-      <section className="relative w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-center items-center space-y-8">
+      <section className="relative w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-20 flex flex-col justify-center items-center space-y-8">
         {loading ? (
           <div className="text-center">
             <p className="text-gray-600 mb-4">Loading...</p>
@@ -83,31 +69,23 @@ const Beranda = () => {
           </div>
         ) : username ? (
           <>
-            
-    <div className="w-full text-left">
-      <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
-        Selamat Datang di <span className="text-4xl sm:text-5xl">CPSP</span>
-      </h1>
-      <h3 className="text-base sm:text-base font-bold text-[#155E75] mb-4">
-        Layanan Operasional Transportasi
-      </h3>
+            <div className="w-full text-left">
+              <h1 className="w-[40%] text-2xl sm:text-4xl font-bold text-[#155E75] mb-4">
+                Selamat Datang di{" "}
+                <span className="text-4xl sm:text-5xl">CPSP</span>
+              </h1>
+              <h3 className="text-base sm:text-base font-bold text-[#155E75] mb-4">
+                Layanan Operasional Transportasi
+              </h3>
 
-      {/* Paragraf yang bisa disingkat di mobile */}
-      <p className="text-[#155E75] text-xl sm:text-2xl pt-4 w-10/12">
-        {/* Tampilkan teks sesuai dengan kondisi */}
-        {isExpanded || window.innerWidth >= 640 ? fullText : shortText}
-      </p>
-
-      {/* Tombol "Lanjutkan" hanya muncul di mobile */}
-      {window.innerWidth < 640 && (
-        <button
-          onClick={toggleText}
-          className="text-[#155E75] font-bold underline mt-2 sm:hidden"
-        >
-          {isExpanded ? "Sembunyikan" : "Lanjutkan"}
-        </button>
-      )}
-    </div>
+              <p className="w-full text-[#155E75] text-xl sm:text-2xl pt-4 text-justify">
+                Check Point adalah proses pemeriksaan yang dilakukan di titik
+                atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
+                melakukan Check Point, petugas memeriksa surat perintah jalan,
+                kondisi barang dan truk untuk memastikan keamanan dan
+                kelengkapan dalam pengiriman.
+              </p>
+            </div>
 
             <div className="w-full max-w-4xl">
               <iframe
@@ -139,18 +117,18 @@ const Beranda = () => {
                   </Link>
                 </>
               ) : role === "user" ? (
-                <>
+                <div className="col-span-3">
                   <Link to="/check-point">
                     <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
                       Check Point
                     </button>
                   </Link>
-                  <Link to="/geofence">
+                  {/* <Link to="/geofence">
                     <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
                       Tambah Geofence
                     </button>
-                  </Link>
-                </>
+                  </Link> */}
+                </div>
               ) : null}
             </div>
           </>
