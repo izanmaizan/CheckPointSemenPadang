@@ -35,8 +35,9 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://193.203.162.80:3000/me", {
-        // const response = await axios.get("http://localhost:3000/me", {
+      // const response = await axios.get("http://localhost:3000/me", {
+        // const response = await axios.get("http://193.203.162.80:3000/me", {
+        const response = await axios.get("https://193.203.162.80:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -121,7 +122,8 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
     try {
       if (isEditing) {
         await axios.put(
-          `http://193.203.162.80:3000/update-akun/${username}`,
+          // `http://193.203.162.80:3000/update-akun/${username}`,
+          `https://193.203.162.80:3000/update-akun/${username}`,
           {
             // await axios.put(`http://localhost:3000/update-akun/${username}`, {
             username,
@@ -132,7 +134,8 @@ const TambahAkun = ({ user, onClose, onSuccess }) => {
         );
         alert("User berhasil diperbarui!");
       } else {
-        await axios.post("http://193.203.162.80:3000/register", {
+        await axios.post("https://193.203.162.80:3000/register", {
+        // await axios.post("http://193.203.162.80:3000/register", {
           // await axios.post("http://localhost:3000/register", {
           username,
           password,

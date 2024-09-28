@@ -39,8 +39,9 @@ const TambahPetugas = ({
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://193.203.162.80:3000/me", {
-        // const response = await axios.get("http://localhost:3000/me", {
+      // const response = await axios.get("http://localhost:3000/me", {
+        // const response = await axios.get("http://193.203.162.80:3000/me", {
+        const response = await axios.get("https://193.203.162.80:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -85,7 +86,8 @@ const TambahPetugas = ({
   const fetchLocations = async () => {
     try {
       const response = await axios.get(
-        "http://193.203.162.80:3000/titiklokasi"
+        "https://193.203.162.80:3000/titiklokasi"
+        // "http://193.203.162.80:3000/titiklokasi"
       );
       // const response = await axios.get("http://localhost:3000/titiklokasi");
       setLocations(response.data);
@@ -140,15 +142,17 @@ const TambahPetugas = ({
       if (isEdit) {
         // Edit existing petugas
         await axios.put(
-          `http://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
           // `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
+          // `http://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
+          `https://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
         alert("Petugas berhasil diperbarui!");
       } else {
         // Add new petugas
         await axios.post(
-          "http://193.203.162.80:3000/petugas",
+          // "http://193.203.162.80:3000/petugas",
+          "https://193.203.162.80:3000/petugas",
           petugasData
         );
         // await axios.post("http://localhost:3000/petugas", petugasData);

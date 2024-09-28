@@ -40,7 +40,8 @@ const Laporan = () => {
       }, 10000);
 
       // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
-      const response = await axios.get("http://193.203.162.80:3000/me", {
+      // const response = await axios.get("http://193.203.162.80:3000/me", {
+      const response = await axios.get("https://193.203.162.80:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -81,7 +82,8 @@ const Laporan = () => {
       // const response = await axios.get(
       //   "https://backend-cpsp.vercel.app/laporan",
       //   {
-      const response = await axios.get("http://193.203.162.80:3000/laporan", {
+      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
+      const response = await axios.get("https://193.203.162.80:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -101,7 +103,8 @@ const Laporan = () => {
       // const response = await axios.get(
       //   "https://backend-cpsp.vercel.app/titiklokasi",
       //   {
-      const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
+      // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
+      const response = await axios.get("https://193.203.162.80:3000/titiklokasi", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

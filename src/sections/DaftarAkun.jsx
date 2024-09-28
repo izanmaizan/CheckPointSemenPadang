@@ -37,7 +37,8 @@ const DaftarAkun = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://193.203.162.80:3000/me", {
+      const response = await axios.get("https://193.203.162.80:3000/me", {
+      // const response = await axios.get("http://193.203.162.80:3000/me", {
         // const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -72,7 +73,8 @@ const DaftarAkun = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://193.203.162.80:3000/users",
+        // "http://193.203.162.80:3000/users",
+        "https://193.203.162.80:3000/users",
         {
           // const response = await axios.get("http://localhost:3000/users", {
           headers: {
@@ -113,7 +115,8 @@ const DaftarAkun = () => {
     try {
       // Gunakan username sebagai parameter URL
       await axios.delete(
-        `http://193.203.162.80:3000/delete-user/${itemToDelete}`,
+        // `http://193.203.162.80:3000/delete-user/${itemToDelete}`,
+        `https://193.203.162.80:3000/delete-user/${itemToDelete}`,
         {
           // await axios.delete(`http://localhost:3000/delete-user/${itemToDelete}`, {
           headers: {

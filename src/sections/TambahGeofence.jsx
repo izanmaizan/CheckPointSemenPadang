@@ -19,8 +19,9 @@ const TambahGeofence = () => {
       const fetchLokasi = async () => {
         try {
           const response = await axios.get(
-            "http://193.203.162.80:3000/titiklokasi",
             // "http://localhost:3000/titiklokasi",
+            // "http://193.203.162.80:3000/titiklokasi",
+            "https://193.203.162.80:3000/titiklokasi",
             {
               headers: {
                 Authorization: `Bearer ${refreshToken}`, // Mengirimkan token di header
@@ -88,8 +89,9 @@ const TambahGeofence = () => {
       .split(",")
       .map((coord) => parseFloat(coord.trim()));
     try {
-      await axios.post("http://193.203.162.80:3000/geofence", {
-        // await axios.post("http://localhost:3000/geofence", {
+      // await axios.post("http://localhost:3000/geofence", {
+        // await axios.post("http://193.203.162.80:3000/geofence", {
+        await axios.post("https://193.203.162.80:3000/geofence", {
         id_lokasi: selectedLokasi,
         geofence_data: geofenceData,
         alamat,
