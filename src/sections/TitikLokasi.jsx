@@ -33,7 +33,7 @@ const TitikLokasi = () => {
     try {
       // const response = await axios.get("http://localhost:3000/me", {
         // const response = await axios.get("http://193.203.162.80:3000/me", {
-        const response = await axios.get("https://193.203.162.80:3000/me", {
+        const response = await axios.get("https://193.203.162.80:80/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -50,7 +50,7 @@ const TitikLokasi = () => {
     try {
       const response = await axios.get(
         // "http://193.203.162.80:3000/titiklokasi"
-        "https://193.203.162.80:3000/titiklokasi"
+        "https://193.203.162.80:80/titiklokasi"
       );
       // const response = await axios.get("http://localhost:3000/titiklokasi");
       setTitikLokasiList(response.data);
@@ -80,10 +80,10 @@ const TitikLokasi = () => {
     try {
       const method = isEditing ? "PUT" : "POST";
       const url = isEditing
-        ? `https://193.203.162.80:3000/titiklokasi/${editId}`
+        ? `https://193.203.162.80:80/titiklokasi/${editId}`
         // ? `http://193.203.162.80:3000/titiklokasi/${editId}`
         : // ? `http://localhost:3000/titiklokasi/${editId}`
-          "https://193.203.162.80:3000/titiklokasi";
+          "https://193.203.162.80:80/titiklokasi";
           // "http://193.203.162.80:3000/titiklokasi";
       // : "http://localhost:3000/titiklokasi";
 
@@ -131,7 +131,7 @@ const TitikLokasi = () => {
     setLoading(true);
     try {
       await axios.delete(
-        `https://193.203.162.80:3000/titiklokasi/${deleteId}`
+        `https://193.203.162.80:80/titiklokasi/${deleteId}`
         // `http://193.203.162.80:3000/titiklokasi/${deleteId}`
       );
       // await axios.delete(`http://localhost:3000/titiklokasi/${deleteId}`);
@@ -167,7 +167,7 @@ const TitikLokasi = () => {
   const checkIdLokasiExistence = async (id) => {
     try {
       const response = await axios.get(
-        `https://193.203.162.80:3000/titiklokasi/${id}`
+        `https://193.203.162.80:80/titiklokasi/${id}`
         // `http://193.203.162.80:3000/titiklokasi/${id}`
         // `http://localhost:3000/titiklokasi/${id}`
       );
