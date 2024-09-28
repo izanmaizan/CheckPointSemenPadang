@@ -23,7 +23,7 @@ const Nav = () => {
     try {
       // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
       // const response = await axios.get("http://193.203.162.80:3000/me", {
-      const response = await axios.get("https://193.203.162.80:80/me", {
+      const response = await axios.get("https://193.203.162.80:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

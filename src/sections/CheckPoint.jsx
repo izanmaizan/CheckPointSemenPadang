@@ -89,7 +89,7 @@ const CheckPoint = () => {
   const fetchLocations = async () => {
     try {
       // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
-      const response = await axios.get("https://193.203.162.80:80/titiklokasi", {
+      const response = await axios.get("https://193.203.162.80:3000/titiklokasi", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -109,7 +109,7 @@ const CheckPoint = () => {
     try {
       const response = await axios.get(
         // `http://193.203.162.80:3000/petugas/${id_lokasi}`,
-        `https://193.203.162.80:80/petugas/${id_lokasi}`,
+        `https://193.203.162.80:3000/petugas/${id_lokasi}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -251,7 +251,7 @@ const CheckPoint = () => {
 
       const response = await axios.post(
         // "http://193.203.162.80:3000/checkpoints",
-        "https://193.203.162.80:80/checkpoints",
+        "https://193.203.162.80:3000/checkpoints",
         formData,
         {
           headers: {
