@@ -41,7 +41,7 @@ const TambahPetugas = ({
 
       // const response = await axios.get("http://localhost:3000/me", {
         // const response = await axios.get("http://193.203.162.80:3000/me", {
-        const response = await axios.get("https://193.203.162.80:3000/me", {
+        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -86,7 +86,7 @@ const TambahPetugas = ({
   const fetchLocations = async () => {
     try {
       const response = await axios.get(
-        "https://193.203.162.80:3000/titiklokasi"
+        "https://checkpoint-sig.site:3000/titiklokasi"
         // "http://193.203.162.80:3000/titiklokasi"
       );
       // const response = await axios.get("http://localhost:3000/titiklokasi");
@@ -144,7 +144,7 @@ const TambahPetugas = ({
         await axios.put(
           // `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
           // `http://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
-          `https://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
+          `https://checkpoint-sig.site:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
         alert("Petugas berhasil diperbarui!");
@@ -152,7 +152,7 @@ const TambahPetugas = ({
         // Add new petugas
         await axios.post(
           // "http://193.203.162.80:3000/petugas",
-          "https://193.203.162.80:3000/petugas",
+          "https://checkpoint-sig.site:3000/petugas",
           petugasData
         );
         // await axios.post("http://localhost:3000/petugas", petugasData);

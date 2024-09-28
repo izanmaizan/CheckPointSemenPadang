@@ -41,7 +41,7 @@ const Laporan = () => {
 
       // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
       // const response = await axios.get("http://193.203.162.80:3000/me", {
-      const response = await axios.get("https://193.203.162.80:80/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -83,7 +83,7 @@ const Laporan = () => {
       //   "https://backend-cpsp.vercel.app/laporan",
       //   {
       // const response = await axios.get("http://193.203.162.80:3000/laporan", {
-      const response = await axios.get("https://193.203.162.80:80/laporan", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -104,7 +104,7 @@ const Laporan = () => {
       //   "https://backend-cpsp.vercel.app/titiklokasi",
       //   {
       // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
-      const response = await axios.get("https://193.203.162.80:80/titiklokasi", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
