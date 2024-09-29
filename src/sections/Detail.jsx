@@ -154,6 +154,15 @@ const Detail = () => {
     }
   };
 
+  const handleBack = async () => {
+    if (isEditing) {
+      setIsEditing(false);
+    } else {
+      navigate(-1);
+    }
+  };
+
+
   const handlePreview = (url) => {
     setPreviewUrl(url);
   };
@@ -337,7 +346,7 @@ const Detail = () => {
                 onChange={(e) =>
                   setDetailData({ ...detailData, keterangan: e.target.value })
                 }
-                className="border rounded-md p-2 w-full"
+                className="border rounded-md p-2 w-full text-red-500"
               />
             </div>
             <div className="mb-4">
@@ -402,7 +411,7 @@ const Detail = () => {
               <strong>Ekspeditur:</strong> {detailData.ekspeditur}
             </p>
             <p className="mb-2">
-              <strong>Keterangan:</strong> {detailData.keterangan}
+              <strong>Keterangan:</strong> <span className="font-semibold text-red-500">{detailData.keterangan}</span>
             </p>
             <p className="mb-4">
               <strong>No. HP Petugas:</strong> {detailData.no_hp}
@@ -475,7 +484,7 @@ const Detail = () => {
           Hapus
         </button>
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="bg-[#0E7490] text-white px-4 py-2 rounded-md hover:bg-[#155E75] col-span-2 mx-1 mt-1">
           Kembali
         </button>

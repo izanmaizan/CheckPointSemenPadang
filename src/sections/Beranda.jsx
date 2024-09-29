@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Beranda = () => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640); // Cek apakah mobile
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,32 @@ const Beranda = () => {
     } else {
       navigate("/login");
     }
+
+    // Event listener untuk deteksi perubahan ukuran layar
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [navigate]);
+
+  // Teks singkat (sebagian) dan teks lengkap
+  const shortText =
+    "Check Point adalah proses pemeriksaan yang dilakukan di titik atau lokasi tertentu sebelum barang sampai pada tujuan.";
+  const fullText = `Check Point adalah proses pemeriksaan yang dilakukan di titik
+  atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
+  melakukan Check Point, petugas memeriksa surat perintah jalan,
+  kondisi barang dan truk untuk memastikan keamanan dan
+  kelengkapan dalam pengiriman.`;
+
+  // Fungsi untuk toggle teks
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const fetchUserData = async () => {
     try {
@@ -80,12 +107,18 @@ const Beranda = () => {
               </h3>
 
               <p className="w-full text-[#155E75] text-xl sm:text-2xl pt-4 text-justify">
-                Check Point adalah proses pemeriksaan yang dilakukan di titik
-                atau lokasi tertentu sebelum barang sampai pada tujuan. Dalam
-                melakukan Check Point, petugas memeriksa surat perintah jalan,
-                kondisi barang dan truk untuk memastikan keamanan dan
-                kelengkapan dalam pengiriman.
+                {/* Tampilkan teks sesuai dengan kondisi */}
+                {isMobile ? (isExpanded ? fullText : shortText) : fullText}
               </p>
+
+              {/* Tombol "Lanjutkan" hanya muncul di mobile */}
+              {isMobile && (
+                <button
+                  onClick={toggleText}
+                  className="text-[#155E75] font-bold underline mt-2 sm:hidden">
+                  {isExpanded ? "Sembunyikan" : "Lanjutkan"}
+                </button>
+              )}
             </div>
 
             <div className="w-full max-w-4xl">
@@ -124,11 +157,6 @@ const Beranda = () => {
                       Check Point
                     </button>
                   </Link>
-                  {/* <Link to="/geofence">
-                    <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
-                      Tambah Geofence
-                    </button>
-                  </Link> */}
                 </div>
               ) : null}
             </div>
