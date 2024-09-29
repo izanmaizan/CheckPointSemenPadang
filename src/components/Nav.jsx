@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { RiShieldUserFill, RiMapPinUserFill } from "react-icons/ri"; // Import icons for user and admin
 import "../index.css";
 import axios from "axios";
 
@@ -8,8 +9,10 @@ const Nav = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [name, setName] = useState("");
-  const [role, setRole] = useState(""); // Tambahkan state untuk role
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refresh_token");
@@ -47,20 +50,21 @@ const Nav = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <header className="bg-[rgba(12,100,122,0.7)] p-4 fixed top-0 left-0 w-full z-50 shadow-md backdrop-blur-sm rounded-lg">
       <nav className="max-w-screen-xl mx-auto flex justify-between items-center">
-        {/* Logo */}
         <img
           src="../assets/Logo_ptsp.png"
           alt="logo"
           className="w-32 h-10 sm:w-32 sm:h-10"
         />
 
-        {/* Hanya tampil jika isAuthenticated */}
         {isAuthenticated && (
           <>
-            {/* Menu untuk Desktop */}
             <ul className="hidden lg:flex gap-8 items-center text-white">
               <li>
                 <Link
@@ -94,28 +98,45 @@ const Nav = () => {
                   </li>
                 </>
               ) : (
-                <>
-                  <li>
-                    <Link
-                      to="/check-point"
-                      className="text-[#A5F3FC] font-bold hover:text-gray-300 border-b-2 border-transparent hover:border-[#A5F3FC] transition-all duration-300">
-                      CheckPoint
-                    </Link>
-                  </li>
-                </>
+                <li>
+                  <Link
+                    to="/check-point"
+                    className="text-[#A5F3FC] font-bold hover:text-gray-300 border-b-2 border-transparent hover:border-[#A5F3FC] transition-all duration-300">
+                    CheckPoint
+                  </Link>
+                </li>
               )}
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="text-[#A5F3FC] font-bold hover:text-gray-300 border-b-2 border-transparent hover:border-[#A5F3FC] transition-all duration-300">
-                  Keluar
-                </button>
-              </li>
+              <div className="flex flex-row">
+                {/* Render different avatars based on user role */}
+                {role === "admin" ? (
+                  <RiShieldUserFill size={24} className="text-[#A5F3FC] mr-2" />
+                ) : (
+                  <RiMapPinUserFill size={24} className="text-[#A5F3FC] mr-2" />
+                )}
+                <div className="relative">
+                  <button
+                    onClick={toggleDropdown}
+                    className="text-[#A5F3FC] font-bold flex items-center">
+                    {name} <span className="ml-2">▼</span>
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 bg-white text-black rounded-lg shadow-lg mt-2 p-4 transition-all duration-200">
+                      <p className="font-semibold">Username: {username}</p>
+                      <p className="font-semibold">Role: {role}</p>
+                      <div className="border-t border-gray-300 my-2"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="text-red-600 hover:text-red-800 font-bold w-full text-left">
+                        Keluar
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </ul>
           </>
         )}
 
-        {/* Hamburger Menu untuk Mobile */}
         <div className="lg:hidden">
           <button onClick={toggleMenu} className="text-white">
             {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -123,10 +144,9 @@ const Nav = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       {isMenuOpen && isAuthenticated && (
         <ul className="lg:hidden bg-[rgba(21,94,117,0.7)] rounded-lg mt-4 flex flex-col items-center gap-4 p-4">
-          <li className="text-white text-xl mb-2">Halo, {name}</li>{" "}
+          <li className="text-white text-xl mb-2">Halo, {name}</li>
           <li>
             <Link
               to="/"
@@ -135,7 +155,6 @@ const Nav = () => {
               Beranda
             </Link>
           </li>
-          {/* Tambahkan salam di dalam mobile menu */}
           {role === "admin" ? (
             <>
               <li>
@@ -179,7 +198,7 @@ const Nav = () => {
                 toggleMenu();
                 handleLogout();
               }}
-              className="text-white bg-[#0c647a] hover:bg-[#0e7490] px-4 py-2 rounded">
+              className="bg-red-600 text-white hover:bg-red-700 border border-transparent px-4 py-2 rounded transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
               Keluar
             </button>
           </li>
