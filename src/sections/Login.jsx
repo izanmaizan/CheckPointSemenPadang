@@ -56,14 +56,36 @@ const Login = () => {
   return (
     <section className="bg-white px-5 py-20 md:py-28 md:px-20 h-full w-full flex flex-col justify-between">
       <div className="grid items-center gap-10 justify-center w-full">
+        
         {/* Lingkaran Latar Belakang */}
         <div className="absolute inset-0 overflow-hidden -z-1">
-          <div className="absolute w-[400px] h-[400px] sm:w-[1100px] sm:h-[1100px] rounded-full bg-[#0E7490] top-[-150px] right-[-150px] sm:right-[-120px] sm:-top-[850px]"></div>
-          <div className="absolute w-[400px] h-[400px] sm:w-[1000px] sm:h-[1000px] rounded-full bg-[#155E75] top-[-150px] left-[-130px] sm:left-[-120px] sm:-top-[750px]"></div>
+          {/* Lingkaran Pertama */}
+          <div
+            className="absolute w-[500px] h-[500px] 
+                  sm:w-[800px] sm:h-[800px] 
+                  md:w-[1100px] md:h-[1100px] 
+                  lg:w-[1000px] lg:h-[1000px] 
+                  rounded-full bg-[#0E7490] 
+                  top-[-220px] right-[-150px] 
+                  sm:right-[-300px] sm:top-[-500px] 
+                  md:right-[-280px] md:top-[-810px] 
+                  lg:right-[-150px] lg:top-[-710px]"></div>
+
+          {/* Lingkaran Kedua */}
+          <div
+            className="absolute w-[500px] h-[500px] 
+                  sm:w-[700px] sm:h-[700px] 
+                  md:w-[1000px] md:h-[1000px] 
+                  lg:w-[1000px] lg:h-[1000px] 
+                  rounded-full bg-[#155E75] 
+                  top-[-220px] left-[-130px] 
+                  sm:left-[-250px] sm:top-[-410px] 
+                  md:left-[-280px] md:top-[-720px] 
+                  lg:left-[-150px] lg:top-[-730px]"></div>
         </div>
 
         {/* Selamat Datang */}
-        <div className="relative flex flex-col z-10 justify-center items-center text-center md:-left-[350px] w-10 md:w-full px-10">
+        <div className="relative flex flex-col z-10 justify-center items-center text-center -left-[70px] sm:-left-[120px] md:-left-[180px] lg:-left-[290px] w-10 md:w-full px-10">
           <h1 className="text-4xl font-semibold text-[#A5F3FC] font-Roboto mb-8">
             Selamat Datang
           </h1>
