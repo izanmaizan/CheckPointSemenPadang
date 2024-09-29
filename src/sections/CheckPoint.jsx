@@ -352,7 +352,7 @@ const CheckPoint = () => {
                   md:w-[1100px] md:h-[1100px] 
                   lg:w-[1200px] lg:h-[1200px] 
                   rounded-full bg-[#0E7490] 
-                  top-[-350px] right-[-150px] 
+                  right-[-150px] top-[-370px]  
                   sm:right-[-120px] sm:-top-[610px] 
                   md:right-[-150px] md:-top-[900px] 
                   lg:right-[-180px] lg:-top-[990px]"></div>
@@ -364,7 +364,7 @@ const CheckPoint = () => {
                   md:w-[1000px] md:h-[1000px] 
                   lg:w-[1100px] lg:h-[1100px] 
                   rounded-full bg-[#155E75] 
-                  -top-[350px] left-[-230px] 
+                  left-[-230px] -top-[370px] 
                   sm:left-[-120px] sm:-top-[510px] 
                   md:left-[-150px] md:-top-[800px] 
                   lg:left-[-180px] lg:-top-[890px]"></div>
