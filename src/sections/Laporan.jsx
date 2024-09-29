@@ -244,7 +244,16 @@ const Laporan = () => {
       <div className="container mx-auto">
         {/* Lingkaran Latar Belakang */}
         <div className="absolute inset-0 overflow-hidden -z-10">
-          <div className="absolute w-[400px] h-[400px] sm:w-[1000px] sm:h-[1000px] rounded-full bg-[#0E7490] top-[-280px] right-[-220px] sm:right-[-350px] sm:-top-[830px]"></div>
+          <div
+            className="absolute w-[400px] h-[400px] 
+                  sm:w-[500px] sm:h-[500px] 
+                  md:w-[700px] md:h-[700px] 
+                  lg:w-[1000px] lg:h-[1000px] 
+                  rounded-full bg-[#0E7490] 
+                  top-[-280px] right-[-220px] 
+                  sm:right-[-250px] sm:top-[-300px] 
+                  md:right-[-300px] md:top-[-500px] 
+                  lg:right-[-400px] lg:top-[-800px]"></div>
         </div>
         <h1 className="text-[40px] font-semibold mb-5 text-[#155E75] font-Roboto">
           <div>Laporan Check</div>
