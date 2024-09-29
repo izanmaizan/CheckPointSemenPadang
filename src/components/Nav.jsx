@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { RiShieldUserFill, RiMapPinUserFill } from "react-icons/ri"; // Import icons for user and admin
@@ -13,6 +13,7 @@ const Nav = () => {
   const [role, setRole] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null); // Create a ref for the dropdown
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refresh_token");
@@ -24,8 +25,6 @@ const Nav = () => {
 
   const fetchUserData = async () => {
     try {
-      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
-      // const response = await axios.get("http://193.203.162.80:3000/me", {
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -54,6 +53,20 @@ const Nav = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  // Close dropdown when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <header className="bg-[rgba(12,100,122,0.7)] p-4 fixed top-0 left-0 w-full z-50 shadow-md backdrop-blur-sm rounded-lg">
@@ -108,13 +121,12 @@ const Nav = () => {
                 </li>
               )}
               <div className="flex flex-row">
-                {/* Render different avatars based on user role */}
                 {role === "admin" ? (
                   <RiShieldUserFill size={24} className="text-[#A5F3FC] mr-2" />
                 ) : (
                   <RiMapPinUserFill size={24} className="text-[#A5F3FC] mr-2" />
                 )}
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={toggleDropdown}
                     className="text-[#A5F3FC] font-bold flex items-center">
