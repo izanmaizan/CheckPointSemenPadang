@@ -383,7 +383,7 @@ const CheckPoint = () => {
             <div className="hidden sm:block">Point</div>
             <div className="block sm:hidden">Point</div>
           </h1>
-          <div className="w-full">
+          <div className="w-full mt-52">
             <form className="max-w-sm mx-auto" onSubmit={handleCheckPoint}>
               {/* Location Selection */}
               <div className="relative mb-6">
