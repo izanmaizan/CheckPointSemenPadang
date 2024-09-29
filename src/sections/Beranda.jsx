@@ -76,9 +76,18 @@ const Beranda = () => {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute w-[400px] h-[400px] sm:w-[700px] sm:h-[700px] rounded-full bg-[#155E75] top-[-200px] right-[-200px] sm:right-[-100px] sm:top-[-420px]"></div>
-      </div>
+    <div className="fixed inset-0 overflow-hidden -z-10">
+      <div
+        className="absolute w-[400px] h-[400px] 
+                sm:w-[580px] sm:h-[580px] 
+                md:w-[680px] md:h-[680px] 
+                lg:w-[700px] lg:h-[700px] 
+                rounded-full bg-[#155E75] 
+                top-[-200px] right-[-200px] 
+                sm:right-[-150px] sm:top-[-350px]
+                md:right-[-150px] md:top-[-450px]
+                "></div>
+    </div>
       <section className="relative w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-20 flex flex-col justify-center items-center space-y-8">
         {loading ? (
           <div className="text-center">
