@@ -345,13 +345,43 @@ const CheckPoint = () => {
       <div className="flex text-start gap-10 justify-center">
         {/* Lingkaran Latar Belakang */}
         <div className="absolute inset-0 overflow-hidden -z-1">
-          <div className="absolute w-[400px] h-[400px] sm:w-[1100px] sm:h-[1100px] rounded-full bg-[#0E7490] top-[-200px] right-[-150px] sm:right-[-120px] sm:-top-[900px]"></div>
-          <div className="absolute w-[400px] h-[400px] sm:w-[1000px] sm:h-[1000px] rounded-full bg-[#155E75] -top-[26%] left-[-130px] sm:left-[-120px] md:-top-[750px]"></div>
+          {/* Lingkaran Pertama */}
+          <div
+            className="absolute w-[600px] h-[600px] 
+                  sm:w-[800px] sm:h-[800px] 
+                  md:w-[1100px] md:h-[1100px] 
+                  lg:w-[1200px] lg:h-[1200px] 
+                  rounded-full bg-[#0E7490] 
+                  top-[-350px] right-[-150px] 
+                  sm:right-[-120px] sm:-top-[610px] 
+                  md:right-[-150px] md:-top-[900px] 
+                  lg:right-[-180px] lg:-top-[990px]"></div>
+
+          {/* Lingkaran Kedua */}
+          <div
+            className="absolute w-[600px] h-[600px] 
+                  sm:w-[700px] sm:h-[700px] 
+                  md:w-[1000px] md:h-[1000px] 
+                  lg:w-[1100px] lg:h-[1100px] 
+                  rounded-full bg-[#155E75] 
+                  -top-[350px] left-[-230px] 
+                  sm:left-[-120px] sm:-top-[510px] 
+                  md:left-[-150px] md:-top-[800px] 
+                  lg:left-[-180px] lg:-top-[890px]"></div>
         </div>
         <div className="w-full flex flex-col gap-5 z-10 justify-center items-start px-2">
-          <h1 className="relative text-4xl font-semibold -top-3 sm:left-80 text-[#A5F3FC] font-Roboto">
-            <div>Check</div>
-            <div>Point</div>
+          <h1
+            className="absolute 
+          top-[90px] left-[50px] 
+          sm:top-[100px] sm:left-[100px] 
+          md:top-[100px] md:left-[150px] 
+          lg:top-[100px] lg:left-[200px] 
+          flex flex-col sm:flex-row sm:items-center text-4xl font-semibold text-[#A5F3FC] font-Roboto">
+            <div className="sm:mr-2 mb-2 sm:mb-0 sm:text-left md:text-center lg:text-right">
+              Check
+            </div>
+            <div className="hidden sm:block">Point</div>
+            <div className="block sm:hidden">Point</div>
           </h1>
           <div className="w-full">
             <form className="max-w-sm mx-auto" onSubmit={handleCheckPoint}>
