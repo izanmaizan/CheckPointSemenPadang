@@ -31,6 +31,7 @@ const Nav = () => {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
+      setName(response.data.username);
       setName(response.data.name);
       setRole(response.data.role); // Set role dari response
     } catch (error) {
