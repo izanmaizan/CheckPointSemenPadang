@@ -85,7 +85,7 @@ const Login = () => {
         </div>
 
         {/* Selamat Datang */}
-        <div className="relative flex flex-col z-10 justify-center items-center text-center -left-[70px] sm:-left-[120px] md:-left-[180px] lg:-left-[290px] w-10 md:w-full px-10">
+        <div className="relative flex flex-col z-10 justify-center items-center text-center -left-[0px] sm:-left-[120px] md:-left-[180px] lg:-left-[290px] w-10 md:w-full px-10">
           <h1 className="text-4xl font-semibold text-[#A5F3FC] font-Roboto mb-8">
             Selamat Datang
           </h1>
