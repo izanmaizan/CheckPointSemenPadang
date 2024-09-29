@@ -336,7 +336,7 @@ const CheckPoint = () => {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <p className="text-center text-gray-800">
-              Uploading files, please wait...
+              Mengunggah media, mohon ditunggu...
             </p>
           </div>
         </div>
@@ -525,8 +525,8 @@ const CheckPoint = () => {
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah files</span>
-                    <span>{dokumentasiPreview.length} files selected</span>
+                    <span>Tambah media</span>
+                    <span>{dokumentasiPreview.length} media dipilih</span>
                   </label>
                 </div>
 
