@@ -76,7 +76,7 @@ const Beranda = () => {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
-    <div className="fixed inset-0 overflow-hidden -z-10">
+    <div className="absolute inset-0 overflow-hidden -z-10">
       <div
         className="absolute w-[400px] h-[400px] 
                 sm:w-[580px] sm:h-[580px] 
