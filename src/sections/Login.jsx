@@ -31,7 +31,7 @@ const Login = () => {
             // const response = await axios.post("http://localhost:3000/login", {
             username: username,
             password: password,
-          }
+          }, , { withCredentials: true }
         );
 
         const { accessToken } = response.data;
@@ -124,7 +124,7 @@ const Login = () => {
                   placeholder=" "
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
+                  autoComplete="off" 
                   required
                 />
                 <label
