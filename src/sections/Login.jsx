@@ -31,7 +31,7 @@ const Login = () => {
             // const response = await axios.post("http://localhost:3000/login", {
             username: username,
             password: password,
-          }, , { withCredentials: true }
+          }, { withCredentials: true }
         );
 
         const { accessToken } = response.data;
