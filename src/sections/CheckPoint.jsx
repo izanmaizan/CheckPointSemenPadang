@@ -23,6 +23,9 @@ const CheckPoint = () => {
   const [msg, setMsg] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadSpeed, setUploadSpeed] = useState(0);
+  const [uploadedSize, setUploadedSize] = useState(0);
 
   const [location, setLocation] = useState({
     latitude: null,
@@ -260,13 +263,35 @@ const CheckPoint = () => {
       const geofenceData = `${location.latitude},${location.longitude}`;
       formData.append("geofence_data", geofenceData);
 
+    // Simpan waktu mulai pengiriman
+    const startTime = Date.now();
+
+    try {
       const response = await axios.post(
+        // "http://localhost:3000/checkpoints",
         // "http://193.203.162.80:3000/checkpoints",
         "https://checkpoint-sig.site:3000/checkpoints",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.lengthComputable) {
+              const percentage =
+                (progressEvent.loaded / progressEvent.total) * 100;
+              setUploadProgress(percentage);
+
+              // Hitung waktu berlalu dalam detik
+              const elapsedTime = (Date.now() - startTime) / 1000; // waktu dalam detik
+
+              // Hitung kecepatan upload dalam KBps
+              const speed = progressEvent.loaded / elapsedTime; // bytes per second
+              setUploadSpeed((speed / 1024).toFixed(2)); // konversi ke KBps
+
+              // Update kapasitas yang sudah diunggah
+              setUploadedSize(progressEvent.loaded);
+            }
           },
         }
       );
@@ -282,6 +307,7 @@ const CheckPoint = () => {
       setShowModal(true);
     }
   };
+
 
   const handleModalOk = () => {
     setShowModal(false);
@@ -344,11 +370,51 @@ const CheckPoint = () => {
 
       {/* Loading Indicator */}
       {loading && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <p className="text-center text-gray-800">
-              Mengunggah media, mohon ditunggu...
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
+            <h2 className="text-xl font-semibold text-center text-blue-600 mb-4">
+              Sedang Mengunggah Berkas...
+            </h2>
+            <p className="text-center text-gray-600 mb-2">
+              Mohon tunggu sebentar, proses ini mungkin memerlukan waktu.
             </p>
+            <div className="mt-4">
+              <div className="bg-gray-300 rounded-full h-2">
+                <div
+                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}></div>
+              </div>
+              <p className="text-center text-gray-800 mt-2">
+                {uploadProgress.toFixed(2)}% - {uploadSpeed} KBps
+              </p>
+              <p className="text-center text-gray-800 mt-2">
+                Kapasitas Tersimpan:{" "}
+                {uploadedSize > 1048576
+                  ? (uploadedSize / 1048576).toFixed(2) + " MB"
+                  : (uploadedSize / 1024).toFixed(2) + " KB"}
+              </p>
+            </div>
+            <div className="flex justify-center mt-4">
+              <svg
+                className="animate-spin h-5 w-5 text-blue-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0a12 12 0 00-12 12h4z"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       )}
