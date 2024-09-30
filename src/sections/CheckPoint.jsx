@@ -562,7 +562,7 @@ const CheckPoint = () => {
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah media foto/video</span>
+                    <span>Tambah media (foto/video)</span>
                     <span>{dokumentasiPreview.length} media dipilih</span>
                   </label>
                 </div>
