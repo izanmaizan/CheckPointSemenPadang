@@ -430,7 +430,7 @@ const CheckPoint = () => {
                   md:w-[1100px] md:h-[1100px] 
                   lg:w-[1200px] lg:h-[1200px] 
                   rounded-full bg-[#0E7490] 
-                  right-[-150px] top-[-370px]  
+                  right-[-150px] top-[-400px]  
                   sm:right-[-120px] sm:-top-[610px] 
                   md:right-[-150px] md:-top-[900px] 
                   lg:right-[-180px] lg:-top-[990px]"></div>
@@ -442,7 +442,7 @@ const CheckPoint = () => {
                   md:w-[1000px] md:h-[1000px] 
                   lg:w-[1100px] lg:h-[1100px] 
                   rounded-full bg-[#155E75] 
-                  left-[-230px] -top-[370px] 
+                  left-[-230px] -top-[400px] 
                   sm:left-[-120px] sm:-top-[510px] 
                   md:left-[-150px] md:-top-[800px] 
                   lg:left-[-180px] lg:-top-[890px]"></div>
@@ -450,16 +450,14 @@ const CheckPoint = () => {
         <div className="w-full flex flex-col gap-5 z-10 justify-center items-start px-2">
           <h1
             className="absolute 
-          top-[90px] left-[50px] 
+          top-[100px] left-[30px] 
           sm:top-[100px] sm:left-[100px] 
           md:top-[100px] md:left-[150px] 
           lg:top-[100px] lg:left-[200px] 
-          flex flex-col sm:flex-row sm:items-center text-4xl font-semibold text-[#A5F3FC] font-Roboto">
+          flex flex-col sm:flex-row sm:items-center text-[8vw] sm:text-4xl md:text-4xl lg:text-4xl font-semibold text-[#A5F3FC] font-Roboto">
             <div className="sm:mr-2 mb-2 sm:mb-0 sm:text-left md:text-center lg:text-right">
-              Check
+              Check Point
             </div>
-            <div className="hidden sm:block">Point</div>
-            <div className="block sm:hidden">Point</div>
           </h1>
           <div className="w-full mt-40">
             <form className="max-w-sm mx-auto" onSubmit={handleCheckPoint}>
