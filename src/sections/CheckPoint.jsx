@@ -201,9 +201,12 @@ const CheckPoint = () => {
     }
   };
 
+
+
   const handleCheckPoint = async (e) => {
     e.preventDefault();
 
+    // Validasi input
     if (
       !selectedLocation ||
       !selectedPetugas.length ||
@@ -220,12 +223,12 @@ const CheckPoint = () => {
       return;
     }
 
-      // Cek apakah dokumentasi diisi
-  if (dokumentasi.length === 0) {
-    setMsg("Media harus diisi sebelum mengirim data.");
-    setShowModal(true);
-    return;
-  }
+    // Cek apakah dokumentasi diisi
+    if (dokumentasi.length === 0) {
+      setMsg("Dokumentasi harus diisi sebelum mengirim data.");
+      setShowModal(true);
+      return;
+    }
 
     // Cek apakah lokasi sudah aktif
     if (!location.latitude || !location.longitude || !location.address) {
@@ -235,41 +238,40 @@ const CheckPoint = () => {
     }
 
     setLoading(true);
+    setUploadProgress(0);
+    setUploadSpeed(0);
 
-    try {
-      const formData = new FormData();
-      formData.append(
-        "nama_petugas",
-        selectedPetugas.map((p) => p.value).join(", ")
-      );
-      formData.append("no_hp", noHp.join(", "));
-      formData.append("titik_lokasi", selectedLocation.label);
-      formData.append("alamat", location.address);
-      formData.append("tanggal", tanggal);
-      formData.append("jam", jam);
-      formData.append("no_do", noDO);
-      formData.append("nama_pengemudi", namaPengemudi);
-      formData.append("no_truck", noTruck);
-      formData.append("distributor", distributor);
-      formData.append("ekspeditur", ekspeditur);
-      formData.append("keterangan", keterangan);
+    const formData = new FormData();
+    formData.append(
+      "nama_petugas",
+      selectedPetugas.map((p) => p.value).join(", ")
+    );
+    formData.append("no_hp", noHp.join(", "));
+    formData.append("titik_lokasi", selectedLocation.label);
+    formData.append("alamat", location.address);
+    formData.append("tanggal", tanggal);
+    formData.append("jam", jam);
+    formData.append("no_do", noDO);
+    formData.append("nama_pengemudi", namaPengemudi);
+    formData.append("no_truck", noTruck);
+    formData.append("distributor", distributor);
+    formData.append("ekspeditur", ekspeditur);
+    formData.append("keterangan", keterangan);
 
-      if (dokumentasi.length > 0) {
-        dokumentasi.forEach((file) => {
-          formData.append("dokumentasi", file);
-        });
-      }
+    if (dokumentasi.length > 0) {
+      dokumentasi.forEach((file) => {
+        formData.append("dokumentasi", file);
+      });
+    }
 
-      const geofenceData = `${location.latitude},${location.longitude}`;
-      formData.append("geofence_data", geofenceData);
-
+    const geofenceData = `${location.latitude},${location.longitude}`;
+    formData.append("geofence_data", geofenceData);
+    
     // Simpan waktu mulai pengiriman
     const startTime = Date.now();
 
     try {
       const response = await axios.post(
-        // "http://localhost:3000/checkpoints",
-        // "http://193.203.162.80:3000/checkpoints",
         "https://checkpoint-sig.site:3000/checkpoints",
         formData,
         {
@@ -307,7 +309,6 @@ const CheckPoint = () => {
       setShowModal(true);
     }
   };
-
 
   const handleModalOk = () => {
     setShowModal(false);
