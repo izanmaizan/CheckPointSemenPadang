@@ -171,6 +171,10 @@ const CheckPoint = () => {
     setDokumentasi([]);
     setDokumentasiPreview([]);
     setKeterangan("");
+    setNamaPengemudi("");
+    setNoTruck("");
+    setDistributor("");
+    setEkspeditur("");
   };
 
   // Mengupdate fungsi untuk mendapatkan alamat dan lokasi
