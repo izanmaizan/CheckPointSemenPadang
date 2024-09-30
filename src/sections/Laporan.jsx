@@ -92,7 +92,7 @@ const Laporan = () => {
       setFilteredData(response.data);
     } catch (error) {
       console.error("Error fetching report data: " + error);
-      setMsg("Failed to fetch data. Please try again.");
+      setMsg("Gagal untuk menampilkan Data. Coba lagi.");
     }
     setLoading(false);
   };
@@ -112,7 +112,7 @@ const Laporan = () => {
       setLocations(response.data); // Menyimpan data lokasi yang diterima ke state
     } catch (error) {
       console.error("Error fetching locations: " + error);
-      setMsg("Failed to fetch locations. Please try again.");
+      setMsg("Gagal memuat Lokasi. Coba lagi.");
     }
   };
 

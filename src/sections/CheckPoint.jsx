@@ -710,11 +710,11 @@ const CheckPoint = () => {
                   </button>
                 </Link>
               </div>
-              {msg && (
+              {/* {msg && (
                 <div className="mt-6">
                   <p className="text-center text-red-500">{msg}</p>
                 </div>
-              )}
+              )} */}
             </form>
           </div>
         </div>

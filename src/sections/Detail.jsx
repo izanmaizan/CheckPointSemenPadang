@@ -91,7 +91,7 @@ const Detail = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching detail data: " + error);
-      setMsg("Failed to fetch data. Please try again.");
+      setMsg("Gagal memuat Data. Coba lagi.");
       setLoading(false);
     }
   };
@@ -131,10 +131,10 @@ const Detail = () => {
         },
       });
       setIsEditing(false);
-      setMsg("Data updated successfully.");
+      setMsg("Data sukses diperbarui.");
     } catch (error) {
       console.error("Error updating data: ", error);
-      setMsg("Failed to update data. Please try again.");
+      setMsg("Gagal memperbarui Data. Coba lagi.");
     }
   };
 
@@ -150,7 +150,7 @@ const Detail = () => {
       navigate(-1);
     } catch (error) {
       console.error("Error deleting data: ", error);
-      setMsg("Failed to delete data. Please try again.");
+      setMsg("Gagal menghapus data. Coba lagi.");
     }
   };
 
