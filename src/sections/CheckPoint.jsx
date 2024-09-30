@@ -215,7 +215,7 @@ const CheckPoint = () => {
 
       // Cek apakah dokumentasi diisi
   if (dokumentasi.length === 0) {
-    setMsg("Dokumentasi harus diisi sebelum mengirim data.");
+    setMsg("Media harus diisi sebelum mengirim data.");
     setShowModal(true);
     return;
   }
@@ -562,7 +562,7 @@ const CheckPoint = () => {
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah media</span>
+                    <span>Tambah media foto/video</span>
                     <span>{dokumentasiPreview.length} media dipilih</span>
                   </label>
                 </div>
