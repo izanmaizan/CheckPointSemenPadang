@@ -213,6 +213,13 @@ const CheckPoint = () => {
       return;
     }
 
+      // Cek apakah dokumentasi diisi
+  if (dokumentasi.length === 0) {
+    setMsg("Dokumentasi harus diisi sebelum mengirim data.");
+    setShowModal(true);
+    return;
+  }
+
     // Cek apakah lokasi sudah aktif
     if (!location.latitude || !location.longitude || !location.address) {
       setMsg("Harap aktifkan izin lokasi di perangkat Anda dan coba lagi.");
