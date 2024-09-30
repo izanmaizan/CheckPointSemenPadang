@@ -628,13 +628,14 @@ const CheckPoint = () => {
                     id="file-input"
                     className="absolute inset-0 opacity-0 cursor-pointer"
                     multiple
+                    accept="image/*,video/*" // Allow images and videos
                     onChange={handleFileChange}
                   />
                   <label
                     htmlFor="file-input"
                     className="flex justify-between items-center bg-[#0E7490] text-white px-4 py-2 rounded-md border border-[#737373] cursor-pointer">
-                    <span>Tambah media (foto/video)</span>
-                    <span>{dokumentasiPreview.length} media dipilih</span>
+                    <span>Tambah media (foto/video)</span> {/* Changed to Indonesian */}
+                    <span>{dokumentasiPreview.length} media terpilih</span> {/* Changed to Indonesian */}
                   </label>
                 </div>
 
@@ -654,7 +655,7 @@ const CheckPoint = () => {
                             controls
                             className="w-full h-full object-cover rounded-md border border-[#737373]">
                             <source src={preview.url} type={preview.type} />
-                            Your browser does not support the video tag.
+                            Browser Anda tidak mendukung tag video. {/* Changed to Indonesian */}
                           </video>
                         )}
                         <button
@@ -679,6 +680,8 @@ const CheckPoint = () => {
                   </div>
                 )}
               </div>
+
+
               {/* Keterangan Input */}
               <div className="relative mb-6 mt-6">
                 <textarea
