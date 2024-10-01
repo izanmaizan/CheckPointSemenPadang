@@ -46,7 +46,7 @@ const DaftarTitikLokasi = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("http://localhost:3000/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
       // const response = await axios.get("http://193.203.162.80:3000/me", {
         // const response = await axios.get("http://localhost:3000/me", {
         headers: {
@@ -82,7 +82,7 @@ const DaftarTitikLokasi = () => {
     try {
       const response = await axios.get(
         // "http://193.203.162.80:3000/lokasi-with-details"
-        "http://localhost:3000/lokasi-with-details"
+        "https://checkpoint-sig.site:3000/lokasi-with-details"
         // "http://localhost:3000/lokasi-with-details"
       );
       console.log(response.data); // Tambahkan log ini untuk memeriksa struktur data
@@ -119,13 +119,13 @@ const DaftarTitikLokasi = () => {
     try {
       if (deleteType === "lokasi") {
         await axios.delete(
-          `http://localhost:3000/titiklokasi/${itemToDelete}`
+          `https://checkpoint-sig.site:3000/titiklokasi/${itemToDelete}`
           // `http://193.203.162.80:3000/titiklokasi/${itemToDelete}`
         );
         // await axios.delete(`http://localhost:3000/titiklokasi/${itemToDelete}`);
       } else if (deleteType === "petugas") {
         await axios.delete(
-          `http://localhost:3000/petugas/${itemToDelete}`
+          `https://checkpoint-sig.site:3000/petugas/${itemToDelete}`
           // `http://193.203.162.80:3000/petugas/${itemToDelete}`
         );
         // await axios.delete(`http://localhost:3000/petugas/${itemToDelete}`);

@@ -21,7 +21,7 @@ const TambahGeofence = () => {
           const response = await axios.get(
             // "http://localhost:3000/titiklokasi",
             // "http://193.203.162.80:3000/titiklokasi",
-            "http://localhost:3000/titiklokasi",
+            "https://checkpoint-sig.site:3000/titiklokasi",
             {
               headers: {
                 Authorization: `Bearer ${refreshToken}`, // Mengirimkan token di header
@@ -91,7 +91,7 @@ const TambahGeofence = () => {
     try {
       // await axios.post("http://localhost:3000/geofence", {
         // await axios.post("http://193.203.162.80:3000/geofence", {
-        await axios.post("http://localhost:3000/geofence", {
+        await axios.post("https://checkpoint-sig.site:3000/geofence", {
         id_lokasi: selectedLokasi,
         geofence_data: geofenceData,
         alamat,
