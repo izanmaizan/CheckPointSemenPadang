@@ -25,7 +25,7 @@ const Nav = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("https://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -42,7 +42,7 @@ const Nav = () => {
 // ini pengujian
 const handleLogout = async () => {
   try {
-    await axios.post("https://checkpoint-sig.site:3000/logout", {}, { withCredentials: true });
+    await axios.post("https://localhost:3000/logout", {}, { withCredentials: true });
     setIsAuthenticated(false);
     setName("");
     setRole("");
