@@ -298,7 +298,7 @@ const CheckPoint = () => {
         }
       );
 
-      console.log("Response:", response);
+      // console.log("Response:", response);
       setMsg("Data berhasil disimpan!");
       resetForm();
     } catch (error) {
