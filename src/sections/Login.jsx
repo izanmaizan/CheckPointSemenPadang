@@ -38,7 +38,7 @@ const handleLogin = async (e) => {
       localStorage.setItem("accessToken", accessToken);
 
       navigate("/"); // Navigasi setelah login berhasil
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setMsg("Password salah");
