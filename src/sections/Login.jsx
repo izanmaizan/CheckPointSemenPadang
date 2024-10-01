@@ -12,47 +12,91 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true); // Menandakan bahwa proses login sedang berlangsung
+ini pengujian
 
-    if (!username || !password) {
-      setMsg("Please fill in all fields"); // Menampilkan pesan jika ada field yang kosong
-      setIsLoading(false);
-      return;
-    } else {
-      try {
-        // server public
-        const response = await axios.post(
-          // "http://193.203.162.80:3000/login", 
-          "https://checkpoint-sig.site:3000/login", 
-          {
-            // server local
-            // const response = await axios.post("http://localhost:3000/login", {
-            username: username,
-            password: password,
-          },
-          //  { withCredentials: true }
-        );
 
-        const { accessToken } = response.data;
-        localStorage.setItem("refresh_token", accessToken);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-        navigate("/"); // Navigasi setelah login berhasil
-        window.location.reload();
-      } catch (error) {
-        if (error.response.status === 401) {
-          setMsg("Password salah"); // Menampilkan pesan jika password salah
-        } else if (error.response.status === 404) {
-          setMsg("Username belum terdaftar"); // Menampilkan pesan jika username belum terdaftar
-        } else {
-          setMsg("Gagal untuk Login, periksa kembali password");
-        }
-      } finally {
-        setIsLoading(false); // Mengakhiri proses loading setelah selesai
+  if (!username || !password) {
+    setMsg("Please fill in all fields");
+    setIsLoading(false);
+    return;
+  } else {
+    try {
+      const response = await axios.post(
+        "https://checkpoint-sig.site:3000/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true } // Mengirimkan cookie dengan permintaan
+      );
+
+      const { accessToken } = response.data;
+
+      // Simpan accessToken di localStorage atau gunakan langsung di header API
+      localStorage.setItem("accessToken", accessToken);
+
+      navigate("/"); // Navigasi setelah login berhasil
+      window.location.reload();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setMsg("Password salah");
+      } else if (error.response && error.response.status === 404) {
+        setMsg("Username belum terdaftar");
+      } else {
+        setMsg("Gagal untuk Login, periksa kembali password");
       }
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
+};
+
+  // ini valid
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true); // Menandakan bahwa proses login sedang berlangsung
+
+  //   if (!username || !password) {
+  //     setMsg("Please fill in all fields"); // Menampilkan pesan jika ada field yang kosong
+  //     setIsLoading(false);
+  //     return;
+  //   } else {
+  //     try {
+  //       // server public
+  //       const response = await axios.post(
+  //         // "http://193.203.162.80:3000/login", 
+  //         "https://checkpoint-sig.site:3000/login", 
+  //         {
+  //           // server local
+  //           // const response = await axios.post("http://localhost:3000/login", {
+  //           username: username,
+  //           password: password,
+  //         },
+  //         //  { withCredentials: true }
+  //       );
+
+  //       const { accessToken } = response.data;
+  //       localStorage.setItem("refresh_token", accessToken);
+
+  //       navigate("/"); // Navigasi setelah login berhasil
+  //       window.location.reload();
+  //     } catch (error) {
+  //       if (error.response.status === 401) {
+  //         setMsg("Password salah"); // Menampilkan pesan jika password salah
+  //       } else if (error.response.status === 404) {
+  //         setMsg("Username belum terdaftar"); // Menampilkan pesan jika username belum terdaftar
+  //       } else {
+  //         setMsg("Gagal untuk Login, periksa kembali password");
+  //       }
+  //     } finally {
+  //       setIsLoading(false); // Mengakhiri proses loading setelah selesai
+  //     }
+  //   }
+  // };
 
   return (
     <section className="bg-white px-5 py-20 md:py-28 md:px-20 h-full w-full flex flex-col justify-between">
