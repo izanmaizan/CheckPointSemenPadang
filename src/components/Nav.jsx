@@ -158,7 +158,7 @@ const Nav = () => {
       </nav>
 
       {isMenuOpen && isAuthenticated && (
-        <ul className="lg:hidden bg-[rgba(21,94,117,0.7)] rounded-lg mt-4 flex flex-col items-center gap-4 p-4">
+        <ul className="lg:hidden bg-[rgba(21,94,117,0.7)] rounded-lg mt-4 flex flex-col items-center gap-10 p-4">
           <li className="text-white text-xl mb-2">Halo, {name}</li>
           <li>
             <Link
