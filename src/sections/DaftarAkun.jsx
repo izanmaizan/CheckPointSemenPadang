@@ -37,7 +37,7 @@ const DaftarAkun = () => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("https://localhost:3000/me", {
+      const response = await axios.get("http://localhost:3000/me", {
       // const response = await axios.get("http://193.203.162.80:3000/me", {
         // const response = await axios.get("http://localhost:3000/me", {
         headers: {
@@ -74,7 +74,7 @@ const DaftarAkun = () => {
     try {
       const response = await axios.get(
         // "http://193.203.162.80:3000/users",
-        "https://checkpoint-sig.site:3000/users",
+        "http://localhost:3000/users",
         {
           // const response = await axios.get("http://localhost:3000/users", {
           headers: {
@@ -116,7 +116,7 @@ const DaftarAkun = () => {
       // Gunakan username sebagai parameter URL
       await axios.delete(
         // `http://193.203.162.80:3000/delete-user/${itemToDelete}`,
-        `https://checkpoint-sig.site:3000/delete-user/${itemToDelete}`,
+        `http://localhost:3000/delete-user/${itemToDelete}`,
         {
           // await axios.delete(`http://localhost:3000/delete-user/${itemToDelete}`, {
           headers: {

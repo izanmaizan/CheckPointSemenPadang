@@ -24,7 +24,7 @@ const handleLogin = async (e) => {
   } else {
     try {
       // Kirim permintaan login ke backend
-      await axios.post("localhost:3000/login", {
+      await axios.post("http://localhost:3000/login", {
         username: username,
         password: password,
       }, { withCredentials: true }); // Pastikan untuk menyertakan denganCredentials

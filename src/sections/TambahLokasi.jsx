@@ -34,7 +34,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
 
       // const response = await axios.get("http://localhost:3000/me", {
         // const response = await axios.get("http://193.203.162.80:3000/me", {
-        const response = await axios.get("https://localhost:3000/me", {
+        const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -85,7 +85,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         // Update existing location
         await axios.put(
           // `http://193.203.162.80:3000/titiklokasi/${idLokasi}`,
-          `https://localhost:3000/titiklokasi/${idLokasi}`,
+          `http://localhost:3000/titiklokasi/${idLokasi}`,
           {
             // await axios.put(`http://localhost:3000/titiklokasi/${idLokasi}`, {
             lokasi,
@@ -96,7 +96,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         // Add new location
         // await axios.post("http://localhost:3000/titiklokasi", {
           // await axios.post("http://193.203.162.80:3000/titiklokasi", {
-          await axios.post("https://localhost:3000/titiklokasi", {
+          await axios.post("http://localhost:3000/titiklokasi", {
           id_lokasi: idLokasi,
           lokasi: lokasi,
         });
