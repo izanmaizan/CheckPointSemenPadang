@@ -38,27 +38,13 @@ const Nav = () => {
     }
   };
 
-
-// ini pengujian
-const handleLogout = async () => {
-  try {
-    await axios.post("https://checkpoint-sig.site:3000/logout", {}, { withCredentials: true });
+  const handleLogout = () => {
+    localStorage.removeItem("refresh_token");
     setIsAuthenticated(false);
     setName("");
     setRole("");
     navigate("/login");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
-  // ini valid 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("refresh_token");
-  //   setIsAuthenticated(false);
-  //   setName("");
-  //   setRole("");
-  //   navigate("/login");
-  // };
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
