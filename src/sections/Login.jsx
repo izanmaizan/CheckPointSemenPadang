@@ -32,13 +32,9 @@ const handleLogin = async (e) => {
         { withCredentials: true } // Mengirimkan cookie dengan permintaan
       );
 
-      const { accessToken } = response.data;
+      // Navigasi ke halaman utama setelah login berhasil
+      navigate("/");
 
-      // Simpan accessToken di localStorage atau gunakan langsung di header API
-      localStorage.setItem("accessToken", accessToken);
-
-      navigate("/"); // Navigasi setelah login berhasil
-      window.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setMsg("Password salah");
