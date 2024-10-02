@@ -46,61 +46,33 @@ const Beranda = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const fetchUserData = async () => {
+    try {
+      const timeout = setTimeout(() => {
+        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+        setLoading(false);
+      }, 10000);
 
-// ini pengembangan
-const fetchUserData = async () => {
-  try {
-    // Set timeout jika permintaan terlalu lama
-    const timeout = setTimeout(() => {
-      setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      // const response = await axios.get("http://193.203.162.80:3000/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
+
+      clearTimeout(timeout);
+      const data = response.data;
+      setUsername(data.username);
+      setRole(data.role); // Simpan role yang diterima dari backend
+      localStorage.setItem("username", data.username);
       setLoading(false);
-    }, 10000);
-
-    // Lakukan request ke endpoint /me
-    const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-      withCredentials: true, // Kirim cookie httpOnly bersama permintaan
-    });
-
-    clearTimeout(timeout); // Hentikan timeout jika berhasil
-
-    // Set data yang diterima dari backend
-    const data = response.data;
-    setUsername(data.username);
-    setRole(data.role); // Simpan role dari backend
-    setLoading(false); // Selesai loading
-  } catch (error) {
-    console.error("Error fetching user data: " + error);
-    setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-    setLoading(false); // Gagal
-  }
-};
-
-
-// ini valid
-  // const fetchUserData = async () => {
-  //   try {
-  //     const timeout = setTimeout(() => {
-  //       setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-  //       setLoading(false);
-  //     }, 10000);
-  //     const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-  //       },
-  //     });
-
-  //     clearTimeout(timeout);
-  //     const data = response.data;
-  //     setUsername(data.username);
-  //     setRole(data.role); // Simpan role yang diterima dari backend
-  //     localStorage.setItem("username", data.username);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching user data: " + error);
-  //     setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-  //     setLoading(false);
-  //   }
-  // };
+    } catch (error) {
+      console.error("Error fetching user data: " + error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center">
