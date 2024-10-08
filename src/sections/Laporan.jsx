@@ -76,33 +76,23 @@ const Laporan = () => {
     handleSearch();
   }, [searchDO, selectedLocation, startDate, endDate]);
 
-  // Fungsi untuk mengambil laporan berdasarkan filter
   const fetchReportData = async () => {
     setLoading(true);
     try {
-      const params = {
-        no_do: searchDO || undefined,
-        lokasi: selectedLocation || undefined,
-        start_date: startDate || undefined,
-        end_date: endDate || undefined,
-      };
-  
+      // const response = await axios.get(
+      //   "https://backend-cpsp.vercel.app/laporan",
+      //   {
+      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
       const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
-        params, // Mengirimkan parameter filter ke server
       });
-  
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
-      console.error("Error fetching report data: ", error.response || error.message);
-      if (error.response) {
-          setMsg(`Gagal mengambil data laporan: ${error.response.data.message || error.message}`);
-      } else {
-          setMsg("Gagal mengambil data laporan. Coba lagi.");
-      }
+      console.error("Error fetching report data: " + error);
+      setMsg("Gagal untuk menampilkan Data. Coba lagi.");
     }
     setLoading(false);
   };
@@ -370,10 +360,10 @@ const Laporan = () => {
               {currentData().map((item, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.lokasi}
+                    {item.titik_lokasi}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.petugas}
+                    {item.nama_petugas}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                     {item.no_do}
@@ -417,7 +407,7 @@ const Laporan = () => {
               className="bg-white shadow-md rounded-lg p-4 mb-4 border border-gray-200">
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
                 <span className="font-semibold">Lokasi:</span>
-                <span>{item.lokasi}</span>
+                <span>{item.titik_lokasi}</span>
               </div>
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
