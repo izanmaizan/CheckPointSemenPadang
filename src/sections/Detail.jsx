@@ -12,6 +12,8 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
   const [msg, setMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -138,11 +140,16 @@ const Detail = () => {
     }
   };
 
+  const handleConfirmDelete = (no_do) => {
+    setItemToDelete(no_do);
+    setShowConfirmDelete(true);
+  };
+
   const handleDelete = async () => {
     try {
       // await axios.delete(`https://backend-cpsp.vercel.app/detail/${no_do}`, {
       // await axios.delete(`http://193.203.162.80:3000/detail/${no_do}`, {
-      await axios.delete(`https://checkpoint-sig.site:3000/detail/${no_do}`, {
+      await axios.delete(`https://checkpoint-sig.site:3000/detail/${itemToDelete}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -479,7 +486,7 @@ const Detail = () => {
           </>
         )}
         <button
-          onClick={handleDelete}
+          onClick={handleConfirmDelete}
           className=" bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition mx-1">
           Hapus
         </button>
@@ -513,6 +520,32 @@ const Detail = () => {
           </div>
         </div>
       )} */}
+
+{showConfirmDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-80">
+            <h3 className="text-lg font-semibold mb-2">
+              Konfirmasi Penghapusan
+            </h3>
+            <p>
+              Apakah Anda yakin ingin menghapus akun ini? Operasi ini tidak
+              dapat dibatalkan.
+            </p>
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                onClick={() => setShowConfirmDelete(false)}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded">
+                Batal
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded">
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
