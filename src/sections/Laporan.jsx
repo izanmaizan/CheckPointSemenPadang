@@ -360,7 +360,7 @@ const Laporan = () => {
               {currentData().map((item, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.lokasi}
+                    {item.titik_lokasi}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                     {item.petugas}
@@ -407,7 +407,7 @@ const Laporan = () => {
               className="bg-white shadow-md rounded-lg p-4 mb-4 border border-gray-200">
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
                 <span className="font-semibold">Lokasi:</span>
-                <span>{item.lokasi}</span>
+                <span>{item.titik_lokasi}</span>
               </div>
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
