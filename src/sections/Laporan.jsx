@@ -76,18 +76,24 @@ const Laporan = () => {
     handleSearch();
   }, [searchDO, selectedLocation, startDate, endDate]);
 
+  // Fungsi untuk mengambil laporan berdasarkan filter
   const fetchReportData = async () => {
     setLoading(true);
     try {
-      // const response = await axios.get(
-      //   "https://backend-cpsp.vercel.app/laporan",
-      //   {
-      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
+      const params = {
+        no_do: searchDO || undefined,
+        lokasi: selectedLocation || undefined,
+        start_date: startDate || undefined,
+        end_date: endDate || undefined,
+      };
+  
       const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
+        params, // Mengirimkan parameter filter ke server
       });
+  
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
