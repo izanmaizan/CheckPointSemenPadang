@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const TambahLokasi = ({ location, onClose, onSuccess }) => {
-  const [idLokasi, setIdLokasi] = useState("");
   const [lokasi, setLokasi] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
@@ -32,9 +31,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         setLoading(false);
       }, 10000);
 
-      // const response = await axios.get("http://localhost:3000/me", {
-        // const response = await axios.get("http://193.203.162.80:3000/me", {
-        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -50,11 +47,9 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
       if (data.role === "admin") {
         // Logika untuk mengatur form jika sedang mengedit lokasi
         if (location) {
-          setIdLokasi(location.id_lokasi);
           setLokasi(location.lokasi);
           setIsEditing(true);
         } else {
-          setIdLokasi("");
           setLokasi("");
           setIsEditing(false);
         }
@@ -75,7 +70,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!idLokasi || !lokasi) {
+    if (!lokasi) {
       setError("Silahkan isi semua kolom.");
       return;
     }
@@ -83,22 +78,14 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
     try {
       if (isEditing) {
         // Update existing location
-        await axios.put(
-          // `http://193.203.162.80:3000/titiklokasi/${idLokasi}`,
-          `https://checkpoint-sig.site:3000/titiklokasi/${idLokasi}`,
-          {
-            // await axios.put(`http://localhost:3000/titiklokasi/${idLokasi}`, {
-            lokasi,
-          }
-        );
+        await axios.put(`https://checkpoint-sig.site:3000/titiklokasi/${location.id_lokasi}`, {
+          lokasi,
+        });
         alert("Lokasi berhasil di Perbarui!");
       } else {
-        // Add new location
-        // await axios.post("http://localhost:3000/titiklokasi", {
-          // await axios.post("http://193.203.162.80:3000/titiklokasi", {
-          await axios.post("https://checkpoint-sig.site:3000/titiklokasi", {
-          id_lokasi: idLokasi,
-          lokasi: lokasi,
+        // Add new location (id_lokasi is generated in the backend)
+        await axios.post("https://checkpoint-sig.site:3000/titiklokasi", {
+          lokasi,
         });
         alert("Lokasi berhasil ditambahkan!");
       }
@@ -133,19 +120,6 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         </h2>
         <form onSubmit={handleSubmit}>
           {error && <p className="text-red-600 mb-4">{error}</p>}
-          <div className="mb-4">
-            <label className="block mb-2 text-gray-700" htmlFor="idLokasi">
-              ID Lokasi
-            </label>
-            <input
-              id="idLokasi"
-              type="text"
-              value={idLokasi}
-              onChange={(e) => setIdLokasi(e.target.value)}
-              className="border border-gray-300 px-4 py-2 w-full rounded-lg"
-              disabled={isEditing} // Disable editing of ID if updating
-            />
-          </div>
           <div className="mb-4">
             <label className="block mb-2 text-gray-700" htmlFor="lokasi">
               Lokasi
