@@ -13,7 +13,6 @@ const Detail = () => {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
   const [msg, setMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -140,8 +139,7 @@ const Detail = () => {
     }
   };
 
-  const handleConfirmDelete = (no_do) => {
-    setItemToDelete(no_do);
+  const handleConfirmDelete = () => {
     setShowConfirmDelete(true);
   };
 
@@ -149,7 +147,7 @@ const Detail = () => {
     try {
       // await axios.delete(`https://backend-cpsp.vercel.app/detail/${no_do}`, {
       // await axios.delete(`http://193.203.162.80:3000/detail/${no_do}`, {
-      await axios.delete(`https://checkpoint-sig.site:3000/detail/${itemToDelete}`, {
+      await axios.delete(`https://checkpoint-sig.site:3000/detail/${no_do}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -528,7 +526,7 @@ const Detail = () => {
               Konfirmasi Penghapusan
             </h3>
             <p>
-              Apakah Anda yakin ingin menghapus akun ini? Operasi ini tidak
+              Apakah Anda yakin ingin menghapus Check Point ini? Operasi ini tidak
               dapat dibatalkan.
             </p>
             <div className="flex justify-end space-x-2 mt-4">
