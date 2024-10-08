@@ -4,7 +4,7 @@ import TambahPetugas from "./TambahPetugas";
 import TambahLokasi from "./TambahLokasi";
 import { Link, useNavigate } from "react-router-dom";
 import PetaModal from "./../components/PetaModal.jsx"; // Import modal peta
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 const DaftarTitikLokasi = () => {
   const [titikLokasi, setTitikLokasi] = useState([]);
