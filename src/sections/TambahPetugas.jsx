@@ -11,7 +11,7 @@ const TambahPetugas = ({
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [petugasList, setPetugasList] = useState([
-    { id_petugas: "", nama_petugas: "", no_hp: "" },
+    { nama_petugas: "", no_hp: "" },
   ]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -24,10 +24,8 @@ const TambahPetugas = ({
     const refreshToken = localStorage.getItem("refresh_token");
 
     if (refreshToken) {
-      // Panggil fetchUserData untuk mendapatkan role dari server
       fetchUserData();
     } else {
-      // Redirect ke login jika tidak ada token
       navigate("/login");
     }
   }, [isEdit, petugasToEdit, navigate]);
@@ -39,9 +37,7 @@ const TambahPetugas = ({
         setLoading(false);
       }, 10000);
 
-      // const response = await axios.get("http://localhost:3000/me", {
-        // const response = await axios.get("http://193.203.162.80:3000/me", {
-        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -50,30 +46,24 @@ const TambahPetugas = ({
       clearTimeout(timeout);
       const data = response.data;
       setUsername(data.username);
-      setRole(data.role); // Simpan role dari backend
+      setRole(data.role);
       localStorage.setItem("username", data.username);
 
-      // Cek apakah role adalah admin
       if (data.role === "admin") {
-        // Fetch lokasi jika user adalah admin
         fetchLocations();
 
-        // Jika sedang dalam mode edit, set data petugas yang akan diedit
         if (isEdit && petugasToEdit) {
           setSelectedLocation(petugasToEdit.id_lokasi);
           setPetugasList([
             {
-              id_petugas: petugasToEdit.id_petugas,
               nama_petugas: petugasToEdit.nama_petugas,
               no_hp: petugasToEdit.no_hp,
             },
           ]);
         }
       } else {
-        setMsg(
-          "Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama..."
-        );
-        setTimeout(() => navigate("/"), 3000); // Redirect setelah 3 detik
+        setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
+        setTimeout(() => navigate("/"), 3000);
       }
       setLoading(false);
     } catch (error) {
@@ -85,11 +75,7 @@ const TambahPetugas = ({
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get(
-        "https://checkpoint-sig.site:3000/titiklokasi"
-        // "http://193.203.162.80:3000/titiklokasi"
-      );
-      // const response = await axios.get("http://localhost:3000/titiklokasi");
+      const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi");
       setLocations(response.data);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -98,10 +84,7 @@ const TambahPetugas = ({
   };
 
   const handleAddPetugas = () => {
-    setPetugasList([
-      ...petugasList,
-      { id_petugas: "", nama_petugas: "", no_hp: "" },
-    ]);
+    setPetugasList([...petugasList, { nama_petugas: "", no_hp: "" }]);
   };
 
   const handleRemovePetugas = (index) => {
@@ -126,7 +109,7 @@ const TambahPetugas = ({
     }
 
     const emptyFields = petugasList.some(
-      (item) => !item.id_petugas || !item.nama_petugas || !item.no_hp
+      (item) => !item.nama_petugas || !item.no_hp
     );
     if (emptyFields) {
       setError("Silahkan isi semua kolom petugas.");
@@ -142,8 +125,6 @@ const TambahPetugas = ({
       if (isEdit) {
         // Edit existing petugas
         await axios.put(
-          // `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
-          // `http://193.203.162.80:3000/petugas/${petugasToEdit.id_petugas}`,
           `https://checkpoint-sig.site:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
@@ -151,11 +132,9 @@ const TambahPetugas = ({
       } else {
         // Add new petugas
         await axios.post(
-          // "http://193.203.162.80:3000/petugas",
           "https://checkpoint-sig.site:3000/petugas",
           petugasData
         );
-        // await axios.post("http://localhost:3000/petugas", petugasData);
         alert("Petugas berhasil ditambahkan!");
       }
 
@@ -184,9 +163,7 @@ const TambahPetugas = ({
         </div>
       )}
 
-      <div
-        className="bg-white rounded-lg p-6 max-w-lg mx-auto overflow-auto"
-        style={{ maxHeight: "80vh" }}>
+      <div className="bg-white rounded-lg p-6 max-w-lg mx-auto overflow-auto" style={{ maxHeight: "80vh" }}>
         <h2 className="text-2xl font-extrabold mb-4 text-[#155E75] font-Roboto">
           {isEdit ? "Edit Petugas" : "Tambah Petugas"}
         </h2>
@@ -208,24 +185,9 @@ const TambahPetugas = ({
           </div>
 
           {petugasList.map((petugas, index) => (
-            <div
-              key={index}
-              className="mb-4 border border-[#155E75] p-4 rounded">
+            <div key={index} className="mb-4 border border-[#155E75] p-4 rounded">
               <div className="mb-2">
-                <label className="block mb-1 text-[#155E75]">ID Petugas</label>
-                <input
-                  type="text"
-                  name="id_petugas"
-                  value={petugas.id_petugas}
-                  onChange={(e) => handlePetugasChange(index, e)}
-                  className="border border-[#155E75] px-4 py-2 w-full rounded"
-                  disabled={isEdit} // Disable editing ID in edit mode
-                />
-              </div>
-              <div className="mb-2">
-                <label className="block mb-1 text-[#155E75]">
-                  Nama Petugas
-                </label>
+                <label className="block mb-1 text-[#155E75]">Nama Petugas</label>
                 <input
                   type="text"
                   name="nama_petugas"
@@ -258,7 +220,7 @@ const TambahPetugas = ({
             <button
               type="button"
               onClick={handleAddPetugas}
-              className="bg-[#0c647a] mb-4 hover:bg-blue-700bg-[#0c647a] text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
+              className="bg-[#0c647a] mb-4 text-white px-4 py-2 rounded-lg hover:bg-[#0a4f63]">
               Tambah lagi Petugas
             </button>
           )}
