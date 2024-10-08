@@ -97,8 +97,12 @@ const Laporan = () => {
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
-      console.error("Error fetching report data: " + error);
-      setMsg("Gagal untuk menampilkan Data. Coba lagi.");
+      console.error("Error fetching report data: ", error.response || error.message);
+      if (error.response) {
+          setMsg(`Gagal mengambil data laporan: ${error.response.data.message || error.message}`);
+      } else {
+          setMsg("Gagal mengambil data laporan. Coba lagi.");
+      }
     }
     setLoading(false);
   };
