@@ -4,6 +4,7 @@ import TambahPetugas from "./TambahPetugas";
 import TambahLokasi from "./TambahLokasi";
 import { Link, useNavigate } from "react-router-dom";
 import PetaModal from "./../components/PetaModal.jsx"; // Import modal peta
+import XLSX from 'xlsx';
 
 const DaftarTitikLokasi = () => {
   const [titikLokasi, setTitikLokasi] = useState([]);
@@ -195,6 +196,26 @@ const DaftarTitikLokasi = () => {
       )
   );
 
+
+
+const exportToExcel = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+  
+  // Create a worksheet from the data
+  const ws = XLSX.utils.json_to_sheet(titikLokasi.map(loc => ({
+    Lokasi: loc.lokasi,
+    Petugas: loc.petugas.map(p => p.nama_petugas).join(', '), // Assuming petugas is an array
+    No_HP: loc.petugas.map(p => p.no_hp).join(', '), // Assuming no_hp is part of petugas
+  })));
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Titik Lokasi");
+
+  // Generate the Excel file
+  XLSX.writeFile(wb, "titik_lokasi.xlsx");
+};
+
   return (
     <section className=" bg-gray-100 py-16 px-5 h-full w-full md:py-20 md:px-20">
       {msg && (
@@ -232,6 +253,11 @@ const DaftarTitikLokasi = () => {
           className="bg-[#0c647a] text-white px-4 py-2 rounded-2xl shadow-md hover:bg-[#0c647a] transition duration-300">
           Tambah Petugas
         </button>
+      <button
+        onClick={exportToExcel}
+        className="bg-[#0c647a] text-white px-4 py-2 rounded-2xl shadow-md hover:bg-[#0c647a] transition duration-300">
+        Ekspor ke Excel
+      </button>
       </div>
 
       {showAddLocation && (
