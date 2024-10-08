@@ -412,7 +412,7 @@ const Laporan = () => {
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
                 <span className="font-semibold">Petugas:</span>
-                <span>{item.petugas}</span>
+                <span>{item.nama_petugas}</span>
               </div>
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
