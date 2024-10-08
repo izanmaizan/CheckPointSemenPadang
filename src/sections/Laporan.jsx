@@ -360,7 +360,7 @@ const Laporan = () => {
               {currentData().map((item, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.titik_lokasi}
+                    {item.lokasi}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                     {item.nama_petugas}
