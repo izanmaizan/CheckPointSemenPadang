@@ -363,7 +363,7 @@ const Laporan = () => {
                     {item.lokasi}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.nama_petugas}
+                    {item.petugas}
                   </td>
                   <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                     {item.no_do}
@@ -412,7 +412,7 @@ const Laporan = () => {
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
                 <span className="font-semibold">Petugas:</span>
-                <span>{item.nama_petugas}</span>
+                <span>{item.petugas}</span>
               </div>
 
               <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
