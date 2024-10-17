@@ -19,18 +19,19 @@ const Beranda = () => {
     } else {
       navigate("/login");
     }
-
+  
     // Event listener untuk deteksi perubahan ukuran layar
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
     };
-
-    window.addEventListener("resize", handleResize);
-
+  
+    window.addEventListener("resize", handleResize, { passive: true }); // Tambahkan passive: true
+  
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [navigate]);
+  
 
   // Teks singkat (sebagian) dan teks lengkap
   const shortText =
