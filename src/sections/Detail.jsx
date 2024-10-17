@@ -32,42 +32,40 @@ const Detail = () => {
   }, [no_do, navigate]);
 
   const fetchUserData = async () => {
+    setLoading(true);
+    const timeout = setTimeout(() => {
+      setMsg("Loading berlangsung lama, mohon login kembali.");
+      setLoading(false);
+    }, 10000);
+  
     try {
-      const timeout = setTimeout(() => {
-        setMsg("Loading berlangsung lama, mohon login kembali.");
-        setLoading(false);
-      }, 10000);
-
-      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
-      // const response = await axios.get("http://193.203.162.80:3000/me", {
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
-
+  
       clearTimeout(timeout);
       const data = response.data;
       setUsername(data.username);
-      setRole(data.role); // Simpan role yang diterima dari backend
+      setRole(data.role);
       localStorage.setItem("username", data.username);
-
-      // Pengecekan role setelah data user didapatkan
+  
       if (data.role === "admin") {
-        fetchDetailData(); // Panggil data detail jika user adalah admin
+        await fetchDetailData(); // Pastikan untuk menunggu hasil dari fetchDetailData
       } else {
-        setMsg(
-          "Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama..."
-        );
-        setTimeout(() => navigate("/"), 3000); // Redirect setelah 3 detik
+        setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
+        setTimeout(() => navigate("/"), 3000);
       }
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching user data: " + error);
+      console.error("Error fetching user data: ", error);
       setMsg("Terjadi kesalahan, mohon login kembali.");
+    } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   };
+  
 
   const fetchDetailData = async () => {
     try {
