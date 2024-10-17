@@ -299,7 +299,7 @@ const CheckPoint = () => {
       );
 
       // console.log("Response:", response);
-      setMsg("Data berhasil diterkirim!");
+      setMsg("Data berhasil dikirim!");
       resetForm();
     } catch (error) {
       console.error("Error:", error.response || error.message);
