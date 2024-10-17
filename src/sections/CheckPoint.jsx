@@ -33,7 +33,6 @@ const CheckPoint = () => {
     longitude: null,
     address: "",
   });
-  
 
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -50,7 +49,7 @@ const CheckPoint = () => {
       // Set data dari response
       setUsername(response.data.username);
       setName(response.data.name);
-      setRole(response.data.role); // Set role dari response
+      setRole(response.data.role);
 
       // Simpan data ke localStorage
       localStorage.setItem("name", response.data.name);
