@@ -422,6 +422,9 @@ const Detail = () => {
               <strong>No. HP Petugas:</strong> {detailData.no_hp}
             </p>
             <p className="mb-4">
+              <strong>Akun yang dipakai:</strong> {detailData.name}
+            </p>
+            <p className="mb-4">
               <strong>Alamat:</strong> {detailData.alamat}
             </p>
             <p className="mb-2">
