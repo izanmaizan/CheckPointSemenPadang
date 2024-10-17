@@ -86,7 +86,7 @@ const DaftarTitikLokasi = () => {
         "https://checkpoint-sig.site:3000/lokasi-with-details"
         // "http://localhost:3000/lokasi-with-details"
       );
-      console.log(response.data); // Tambahkan log ini untuk memeriksa struktur data
+      // console.log(response.data); // Tambahkan log ini untuk memeriksa struktur data
       if (Array.isArray(response.data)) {
         setTitikLokasi(response.data);
       } else {
