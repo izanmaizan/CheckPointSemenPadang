@@ -33,52 +33,29 @@ const CheckPoint = () => {
     longitude: null,
     address: "",
   });
+  
+
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
+
   const fetchUserData = async () => {
     try {
-      const timeout = setTimeout(() => {
-        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-        setLoading(false);
-      }, 10000);
-  
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
-  
-      clearTimeout(timeout);
       
-      // Cek apakah data yang diterima valid
-      if (response.data) {
-        const { name, username, role } = response.data; // Destructuring data
-        setAkun(name); // Set state untuk nama
-        localStorage.setItem("name", name); // Simpan nama ke localStorage
-        localStorage.setItem("username", username); // Simpan username ke localStorage
-        localStorage.setItem("role", role); // Simpan role ke localStorage
-  
-        console.log("Name saved to localStorage:", name);
-        console.log("Username saved to localStorage:", username);
-        console.log("Role saved to localStorage:", role);
-      } else {
-        console.warn("Data tidak ditemukan dalam respons API.");
-      }
-  
-      setLoading(false);
+      setUsername(response.data.username);
+      setName(response.data.name);
+      setRole(response.data.role); // Set role dari response
+      // Log data di konsol
+      console.log("Retrieved user data:", response.data);
     } catch (error) {
-      console.error("Error fetching user data: " + error);
-      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-      setLoading(false);
+      console.error("Error fetching user data:", error);
     }
   };
-
-  const savedName = localStorage.getItem("name");
-const savedUsername = localStorage.getItem("username");
-const savedRole = localStorage.getItem("role");
-
-console.log("Retrieved data from localStorage:");
-console.log("Name:", savedName);
-console.log("Username:", savedUsername);
-console.log("Role:", savedRole);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
