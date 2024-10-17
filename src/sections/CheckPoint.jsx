@@ -151,6 +151,14 @@ const CheckPoint = () => {
   const handleLocationChange = (selectedOption) => {
     setSelectedLocation(selectedOption);
     fetchPetugasByLocation(selectedOption.value);
+    // Simpan lokasi yang dipilih ke localStorage
+    localStorage.setItem("selectedLocation", JSON.stringify(selectedOption));
+  };
+
+  const handleTanggalChange = (event) => {
+    setTanggal(event.target.value);
+    // Simpan tanggal yang dipilih ke localStorage
+    localStorage.setItem("tanggal", event.target.value);
   };
 
   const handlePetugasChange = (selectedOptions) => {
