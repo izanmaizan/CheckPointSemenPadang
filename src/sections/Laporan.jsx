@@ -8,7 +8,7 @@ const Laporan = () => {
   const navigate = useNavigate();
   const [reportData, setReportData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [role, setRole] = useState(""); // Tambahkan state untuk role
+  const [role, setRole] = useState(""); // State untuk role
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchDO, setSearchDO] = useState("");
@@ -25,49 +25,43 @@ const Laporan = () => {
     const refreshToken = localStorage.getItem("refresh_token");
 
     if (refreshToken) {
-      // Panggil fetchUserData untuk mendapatkan role dari server
-      fetchUserData();
+      fetchUserData(); // Panggil fungsi untuk mengambil data pengguna
     } else {
       navigate("/login");
     }
   }, [navigate]);
 
   const fetchUserData = async () => {
-    setLoading(true); // Tambahkan ini
+    setLoading(true);
     try {
-        const timeout = setTimeout(() => {
-            setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-            setLoading(false);
-        }, 10000);
+      const timeout = setTimeout(() => {
+        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+        setLoading(false);
+      }, 10000);
 
-        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-            },
-        });
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
 
-        clearTimeout(timeout);
-        const data = response.data;
-        setUsername(data.username);
-        setRole(data.role);
-        localStorage.setItem("username", data.username);
+      clearTimeout(timeout);
+      const data = response.data;
+      setUsername(data.username);
+      setRole(data.role);
+      localStorage.setItem("username", data.username);
 
-        // Pengecekan role
-        if (data.role === "admin") {
-            fetchReportData();
-            fetchLocations();
-        } else {
-            setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
-            setTimeout(() => navigate("/"), 3000);
-        }
+      // Mengambil data laporan dan lokasi untuk admin dan petugas
+      fetchReportData();
+      fetchLocations();
+
     } catch (error) {
-        console.error("Error fetching user data: " + error);
-        setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+      console.error("Error fetching user data: " + error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
     } finally {
-        setLoading(false); // Pastikan ini ada di sini
+      setLoading(false); // Pastikan loading selesai
     }
-};
-
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -77,10 +71,6 @@ const Laporan = () => {
   const fetchReportData = async () => {
     setLoading(true);
     try {
-      // const response = await axios.get(
-      //   "https://backend-cpsp.vercel.app/laporan",
-      //   {
-      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
       const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -98,10 +88,6 @@ const Laporan = () => {
   // Fungsi untuk mengambil data lokasi dari endpoint
   const fetchLocations = async () => {
     try {
-      // const response = await axios.get(
-      //   "https://backend-cpsp.vercel.app/titiklokasi",
-      //   {
-      // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
       const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -140,6 +126,18 @@ const Laporan = () => {
       filtered = filtered.filter(
         (item) => new Date(formatDate(item.tanggal)) <= new Date(endDate)
       );
+    }
+
+    // Jika role adalah petugas, filter berdasarkan lokasi dan tanggal yang disimpan di localStorage
+    if (role === "petugas") {
+      const storedLocation = localStorage.getItem("selectedLocation");
+      const storedDate = localStorage.getItem("selectedDate");
+      if (storedLocation) {
+        filtered = filtered.filter((item) => item.lokasi === storedLocation);
+      }
+      if (storedDate) {
+        filtered = filtered.filter((item) => item.tanggal === storedDate);
+      }
     }
 
     setFilteredData(filtered);
@@ -247,253 +245,109 @@ const Laporan = () => {
                   sm:w-[500px] sm:h-[500px] 
                   md:w-[700px] md:h-[700px] 
                   lg:w-[1000px] lg:h-[1000px] 
-                  rounded-full bg-[#0E7490] 
-                  top-[-280px] right-[-220px] 
-                  sm:right-[-250px] sm:top-[-300px] 
-                  md:right-[-300px] md:top-[-500px] 
-                  lg:right-[-400px] lg:top-[-800px]"></div>
+                  rounded-full bg-gradient-to-br from-[#4B9CD3] to-[#0E7490] animate-spin-slow">
+          </div>
         </div>
-        <h1 className="text-[40px] font-semibold mb-5 text-[#155E75] font-Roboto">
-          <div>Laporan Check</div>
-          <div>Point</div>
+
+        <Nav />
+
+        <h1 className="text-center font-bold text-3xl text-[#0e7490] mb-10">
+          Laporan Check Point
         </h1>
 
-        <div className="mb-4 flex flex-col md:flex-row justify-between items-center mx-5 gap-2">
-          {/* Pencarian berdasarkan No. DO */}
-          <div className="flex items-center space-x-2 mb-2 md:mb-0">
+        <div className="flex justify-between items-center mb-4">
+          <div>
             <input
               type="text"
-              placeholder="Cari berdasarkan No. DO"
-              className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
+              placeholder="Cari No. DO"
               value={searchDO}
               onChange={(e) => setSearchDO(e.target.value)}
+              className="border rounded px-2 py-1"
             />
-          </div>
-
-          {/* Dropdown filter berdasarkan titik lokasi */}
-          <div className="flex items-center space-x-2 mb-2 md:mb-0">
             <select
-              className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
               value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}>
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="border rounded px-2 py-1 ml-2">
               <option value="">Semua Lokasi</option>
-              {locations.map((location) => (
-                <option key={location.id_lokasi} value={location.lokasi}>
-                  {location.lokasi}
+              {locations.map((loc) => (
+                <option key={loc.id_lokasi} value={loc.lokasi}>
+                  {loc.lokasi}
                 </option>
               ))}
             </select>
-          </div>
-
-          {/* Filter Tanggal */}
-          <div className="flex items-center space-x-2 mb-2 md:mb-0">
             <input
               type="date"
-              className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              className="border rounded px-2 py-1 ml-2"
             />
-            <span>&gt;</span>
             <input
               type="date"
-              className="border border-gray-300 px-4 py-2 rounded-md focus:outline-none"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              className="border rounded px-2 py-1 ml-2"
             />
           </div>
 
-          {/* Tombol Cetak dan Ekspor */}
-          <div className="flex items-center space-x-2">
+          <div>
             <button
               onClick={handlePrint}
-              className="bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-              Cetak ke PDF
+              className="bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75] mr-2">
+              Print
             </button>
             <button
               onClick={handleExportExcel}
               className="bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-              Ekspor ke Excel
+              Export Excel
             </button>
           </div>
         </div>
 
-        {/* Tabel untuk tampilan desktop */}
-        <div className="overflow-x-auto hidden md:block">
-          <table className="min-w-full bg-white border">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Lokasi
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Petugas
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  No. DO
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  No Truck / Gerbong
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Nama Pengemudi
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Distributor
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Ekspeditur
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Tanggal
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Jam
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-700 uppercase tracking-wider">
-                  Actions
-                </th>
+        <table className="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-[#0E7490] text-white">
+              <th className="border border-gray-300 px-4 py-2">Petugas</th>
+              <th className="border border-gray-300 px-4 py-2">Lokasi</th>
+              <th className="border border-gray-300 px-4 py-2">No. DO</th>
+              <th className="border border-gray-300 px-4 py-2">Tanggal</th>
+              <th className="border border-gray-300 px-4 py-2">Jam</th>
+              <th className="border border-gray-300 px-4 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentData().map((item) => (
+              <tr key={item.id_cp} className="border border-gray-300">
+                <td className="border border-gray-300 px-4 py-2">{item.nama_petugas}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.lokasi}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.no_do}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.tanggal}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.jam}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <Link to={`/details/${item.id_cp}`} className="text-blue-500 hover:underline">Detail</Link>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {currentData().map((item, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.lokasi}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.petugas}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.no_do}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.no_truck}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.nama_pengemudi}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.distributor}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.ekspeditur}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.tanggal}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    {item.jam}
-                  </td>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <button
-                      onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
-                      className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                      Detail
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
 
-        {/* Tampilan mobile */}
-        <div className="block md:hidden">
-          {currentData().map((item, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-lg p-4 mb-4 border border-gray-200">
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Lokasi:</span>
-                <span>{item.lokasi}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Petugas:</span>
-                <span>{item.petugas}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">No. DO:</span>
-                <span>{item.no_do}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">No Truck / Gerbong:</span>
-                <span>{item.no_truck}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Nama Pengemudi:</span>
-                <span>{item.nama_pengemudi}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Distributor:</span>
-                <span>{item.distributor}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Ekspeditur:</span>
-                <span>{item.ekspeditur}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Tanggal:</span>
-                <span>{item.tanggal}</span>
-              </div>
-
-              <div className="flex justify-between border-b border-gray-300 pb-2 mb-2">
-                <span className="font-semibold">Jam:</span>
-                <span>{item.jam}</span>
-              </div>
-
-              <button
-                onClick={() => navigate(`/detail/${item.no_do}`)} // Menggunakan ID untuk navigasi
-                className="mt-2 bg-[#0E7490] text-white px-4 py-2 rounded hover:bg-[#155E75]">
-                Details
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination Controls */}
-        <div className="flex flex-col items-center mt-4">
-          <div className="flex items-center space-x-2 mb-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded">
-              {"<"}
-            </button>
-
-            {/* Page Numbers */}
-            {generatePagination().map((page, index) =>
-              page === "..." ? (
-                <span key={index} className="mx-2 text-gray-500">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={index}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-4 py-2 rounded ${currentPage === page ? "bg-[#0E7490] text-white" : "bg-gray-300 text-gray-700"}`}>
-                  {page}
-                </button>
-              )
-            )}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded">
-              {">"}
-            </button>
+        <div className="flex justify-between items-center mt-4">
+          <div>
+            <p className="text-sm text-gray-700">
+              Menampilkan {itemsPerPage * (currentPage - 1) + 1} hingga{" "}
+              {Math.min(itemsPerPage * currentPage, filteredData.length)} dari{" "}
+              {filteredData.length} hasil
+            </p>
           </div>
 
-          {/* Page Info */}
-          <div className="text-gray-700">
-            Page {currentPage} of {totalPages}
+          <div className="flex">
+            {generatePagination().map((page, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(page)}
+                className={`border rounded px-3 py-1 mx-1 ${page === currentPage ? "bg-[#0E7490] text-white" : "bg-white text-[#0E7490] hover:bg-[#e1e1e1]"}`}>
+                {page}
+              </button>
+            ))}
           </div>
         </div>
       </div>
