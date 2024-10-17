@@ -299,7 +299,7 @@ const CheckPoint = () => {
       );
 
       // console.log("Response:", response);
-      setMsg("Data berhasil disimpan!");
+      setMsg("Data berhasil diterkirim!");
       resetForm();
     } catch (error) {
       console.error("Error:", error.response || error.message);
@@ -699,7 +699,7 @@ const CheckPoint = () => {
                 <button
                   type="submit"
                   className="inline-block w-[170px] h-[60px] bg-[#155E75] text-white font-sans font-bold uppercase text-sm px-6 py-3 rounded-lg shadow-md hover:bg-[#0E7490] hover:shadow-lg focus:bg-[#0E7490] focus:shadow-lg focus:outline-none focus:ring-0 active:bg-[#0E7490] active:shadow-lg transition duration-150 ease-in-out">
-                  Simpan
+                  Kirim
                 </button>
 
                 <Link to="/">
