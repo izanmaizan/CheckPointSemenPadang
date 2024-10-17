@@ -51,8 +51,8 @@ const CheckPoint = () => {
 
       clearTimeout(timeout);
       const data = response.data;
-      setAkun(data.akun);
-      localStorage.setItem("name", data.akun);
+      setAkun(data.name);
+      localStorage.setItem("name", data.name);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user data: " + error);
