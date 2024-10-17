@@ -56,12 +56,6 @@ const CheckPoint = () => {
     fetchUserData();
   }, []);
 
-  // Ambil data dari localStorage dan log ke konsol
-  const savedName = localStorage.getItem("name");
-
-  console.log("Retrieved data from localStorage:");
-  console.log("Name:", savedName);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     const refreshToken = localStorage.getItem("refresh_token");
