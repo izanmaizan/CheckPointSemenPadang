@@ -112,6 +112,7 @@ const Nav = () => {
                   </li>
                 </>
               ) : (
+                <>
                 <li>
                   <Link
                     to="/check-point"
@@ -119,6 +120,15 @@ const Nav = () => {
                     CheckPoint
                   </Link>
                 </li>
+                
+                <li>
+                <Link
+                  to="/laporan"
+                  className="text-[#A5F3FC] font-bold hover:text-gray-300 border-b-2 border-transparent hover:border-[#A5F3FC] transition-all duration-300">
+                  Laporan
+                </Link>
+              </li>
+              </>
               )}
               <div className="flex flex-row">
                 {role === "admin" ? (
