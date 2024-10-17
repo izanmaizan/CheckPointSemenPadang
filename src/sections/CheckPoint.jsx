@@ -34,10 +34,6 @@ const CheckPoint = () => {
     address: "",
   });
 
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('');
-
   const fetchUserData = async () => {
     try {
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
@@ -46,15 +42,11 @@ const CheckPoint = () => {
         },
       });
 
-      // Set data dari response
-      setUsername(response.data.username);
-      setName(response.data.name);
-      setRole(response.data.role);
-
-      // Simpan data ke localStorage
-      localStorage.setItem("name", response.data.name);
-      localStorage.setItem("username", response.data.username);
-      localStorage.setItem("role", response.data.role);
+      // Pastikan response.data.name ada sebelum menyetelnya
+      if (response.data && response.data.name) {
+        setAkun(response.data.name);
+        localStorage.setItem("name", response.data.name); // Simpan di localStorage
+      }
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -66,13 +58,9 @@ const CheckPoint = () => {
 
   // Ambil data dari localStorage dan log ke konsol
   const savedName = localStorage.getItem("name");
-  const savedUsername = localStorage.getItem("username");
-  const savedRole = localStorage.getItem("role");
 
   console.log("Retrieved data from localStorage:");
   console.log("Name:", savedName);
-  console.log("Username:", savedUsername);
-  console.log("Role:", savedRole);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
