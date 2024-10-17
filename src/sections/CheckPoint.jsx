@@ -33,13 +33,12 @@ const CheckPoint = () => {
     longitude: null,
     address: "",
   });
-
   const fetchUserData = async () => {
-    setLoading(true); // Pastikan loading diaktifkan sebelum fetch
+    setLoading(true);
     const timeout = setTimeout(() => {
       setErrorMessage("Loading berlangsung lama, mohon login kembali.");
       setLoading(false);
-    }, 10000); // Timeout untuk loading
+    }, 10000);
   
     try {
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
@@ -48,23 +47,27 @@ const CheckPoint = () => {
         },
       });
   
-      clearTimeout(timeout); // Hentikan timeout jika respons berhasil
+      clearTimeout(timeout);
   
-      // Cek apakah data yang diterima valid
       if (response.data && response.data.name) {
-        setAkun(response.data.name); // Set data akun
-        localStorage.setItem("name", response.data.name); // Simpan nama di localStorage
+        setAkun(response.data.name);
+        localStorage.setItem("name", response.data.name);
+        console.log("Name saved to localStorage:", response.data.name); // Log penyimpanan
       } else {
         console.warn("Data 'name' tidak ditemukan.");
         setErrorMessage("Data pengguna tidak ditemukan.");
       }
     } catch (error) {
-      console.error("Error fetching user data: ", error); // Log kesalahan
-      setErrorMessage("Terjadi kesalahan, mohon login kembali."); // Pesan kesalahan untuk pengguna
+      console.error("Error fetching user data: ", error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
     } finally {
-      setLoading(false); // Pastikan loading dimatikan di akhir
+      setLoading(false);
     }
   };
+  
+  // Ketika Anda ingin mengambil dan menggunakan nama
+  const savedName = localStorage.getItem("name");
+  console.log("Retrieved name from localStorage:", savedName); // Pastikan name diambil dengan benar
   
 
   useEffect(() => {
@@ -379,9 +382,6 @@ const CheckPoint = () => {
     }
   };
 
-
-  const savedName = localStorage.getItem("name");
-console.log(savedName); // Pastikan name diambil dengan benar
 
   // const closeModal = () => setShowModal(false);
 
