@@ -33,43 +33,41 @@ const Laporan = () => {
   }, [navigate]);
 
   const fetchUserData = async () => {
+    setLoading(true); // Tambahkan ini
     try {
-      const timeout = setTimeout(() => {
-        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-        setLoading(false);
-      }, 10000);
+        const timeout = setTimeout(() => {
+            setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+            setLoading(false);
+        }, 10000);
 
-      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
-      // const response = await axios.get("http://193.203.162.80:3000/me", {
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+            },
+        });
 
-      clearTimeout(timeout);
-      const data = response.data;
-      setUsername(data.username);
-      setRole(data.role); // Simpan role yang diterima dari backend
-      localStorage.setItem("username", data.username);
+        clearTimeout(timeout);
+        const data = response.data;
+        setUsername(data.username);
+        setRole(data.role);
+        localStorage.setItem("username", data.username);
 
-      // Pengecekan role setelah data user didapatkan
-      if (data.role === "admin") {
-        fetchReportData();
-        fetchLocations(); // Memanggil fungsi untuk mengambil data lokasi
-      } else {
-        setMsg(
-          "Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama..."
-        );
-        setTimeout(() => navigate("/"), 3000); // Redirect setelah 3 detik
-      }
-      setLoading(false);
+        // Pengecekan role
+        if (data.role === "admin") {
+            fetchReportData();
+            fetchLocations();
+        } else {
+            setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
+            setTimeout(() => navigate("/"), 3000);
+        }
     } catch (error) {
-      console.error("Error fetching user data: " + error);
-      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-      setLoading(false);
+        console.error("Error fetching user data: " + error);
+        setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+    } finally {
+        setLoading(false); // Pastikan ini ada di sini
     }
-  };
+};
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
