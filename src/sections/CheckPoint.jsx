@@ -20,6 +20,7 @@ const CheckPoint = () => {
   const [noTruck, setNoTruck] = useState("");
   const [distributor, setDistributor] = useState("");
   const [ekspeditur, setEkspeditur] = useState("");
+  const [akun, setAkun] = useState("");
   const [msg, setMsg] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,33 @@ const CheckPoint = () => {
     longitude: null,
     address: "",
   });
+
+  const fetchUserData = async () => {
+    try {
+      const timeout = setTimeout(() => {
+        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+        setLoading(false);
+      }, 10000);
+
+      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
+      // const response = await axios.get("http://193.203.162.80:3000/me", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
+
+      clearTimeout(timeout);
+      const data = response.data;
+      setAkun(data.akun);
+      localStorage.setItem("name", data.akun);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user data: " + error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -256,6 +284,7 @@ const CheckPoint = () => {
     formData.append("no_truck", noTruck);
     formData.append("distributor", distributor);
     formData.append("ekspeditur", ekspeditur);
+    formData.append("name", akun);
     formData.append("keterangan", keterangan);
 
     if (dokumentasi.length > 0) {
