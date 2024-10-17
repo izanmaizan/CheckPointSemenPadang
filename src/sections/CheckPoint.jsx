@@ -46,16 +46,34 @@ const CheckPoint = () => {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
-      
+
+      // Set data dari response
       setUsername(response.data.username);
       setName(response.data.name);
       setRole(response.data.role); // Set role dari response
-      // Log data di konsol
-      console.log("Retrieved user data:", response.data);
+
+      // Simpan data ke localStorage
+      localStorage.setItem("name", response.data.name);
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("role", response.data.role);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  // Ambil data dari localStorage dan log ke konsol
+  const savedName = localStorage.getItem("name");
+  const savedUsername = localStorage.getItem("username");
+  const savedRole = localStorage.getItem("role");
+
+  console.log("Retrieved data from localStorage:");
+  console.log("Name:", savedName);
+  console.log("Username:", savedUsername);
+  console.log("Role:", savedRole);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
