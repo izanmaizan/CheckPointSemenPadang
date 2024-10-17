@@ -34,13 +34,12 @@ const CheckPoint = () => {
     address: "",
   });
   const fetchUserData = async () => {
-    setLoading(true);
-    const timeout = setTimeout(() => {
-      setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-      setLoading(false);
-    }, 10000);
-  
     try {
+      const timeout = setTimeout(() => {
+        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+        setLoading(false);
+      }, 10000);
+  
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -48,27 +47,38 @@ const CheckPoint = () => {
       });
   
       clearTimeout(timeout);
+      
+      // Cek apakah data yang diterima valid
+      if (response.data) {
+        const { name, username, role } = response.data; // Destructuring data
+        setAkun(name); // Set state untuk nama
+        localStorage.setItem("name", name); // Simpan nama ke localStorage
+        localStorage.setItem("username", username); // Simpan username ke localStorage
+        localStorage.setItem("role", role); // Simpan role ke localStorage
   
-      if (response.data && response.data.name) {
-        setAkun(response.data.name);
-        localStorage.setItem("name", response.data.name);
-        console.log("Name saved to localStorage:", response.data.name); // Log penyimpanan
+        console.log("Name saved to localStorage:", name);
+        console.log("Username saved to localStorage:", username);
+        console.log("Role saved to localStorage:", role);
       } else {
-        console.warn("Data 'name' tidak ditemukan.");
-        setErrorMessage("Data pengguna tidak ditemukan.");
+        console.warn("Data tidak ditemukan dalam respons API.");
       }
+  
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching user data: ", error);
+      console.error("Error fetching user data: " + error);
       setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-    } finally {
       setLoading(false);
     }
   };
-  
-  // Ketika Anda ingin mengambil dan menggunakan nama
+
   const savedName = localStorage.getItem("name");
-  console.log("Retrieved name from localStorage:", savedName); // Pastikan name diambil dengan benar
-  
+const savedUsername = localStorage.getItem("username");
+const savedRole = localStorage.getItem("role");
+
+console.log("Retrieved data from localStorage:");
+console.log("Name:", savedName);
+console.log("Username:", savedUsername);
+console.log("Role:", savedRole);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
