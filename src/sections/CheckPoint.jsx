@@ -373,6 +373,10 @@ const CheckPoint = () => {
     }
   };
 
+
+  const savedName = localStorage.getItem("name");
+console.log(savedName); // Pastikan name diambil dengan benar
+
   // const closeModal = () => setShowModal(false);
 
   return (
