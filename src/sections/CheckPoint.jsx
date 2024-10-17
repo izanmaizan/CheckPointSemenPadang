@@ -35,31 +35,37 @@ const CheckPoint = () => {
   });
 
   const fetchUserData = async () => {
+    setLoading(true); // Pastikan loading diaktifkan sebelum fetch
+    const timeout = setTimeout(() => {
+      setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+      setLoading(false);
+    }, 10000); // Timeout untuk loading
+  
     try {
-      const timeout = setTimeout(() => {
-        setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-        setLoading(false);
-      }, 10000);
-
-      // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
-      // const response = await axios.get("http://193.203.162.80:3000/me", {
       const response = await axios.get("https://checkpoint-sig.site:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
-
-      clearTimeout(timeout);
-      const data = response.data;
-      setAkun(data.name);
-      localStorage.setItem("name", data.name);
-      setLoading(false);
+  
+      clearTimeout(timeout); // Hentikan timeout jika respons berhasil
+  
+      // Cek apakah data yang diterima valid
+      if (response.data && response.data.name) {
+        setAkun(response.data.name); // Set data akun
+        localStorage.setItem("name", response.data.name); // Simpan nama di localStorage
+      } else {
+        console.warn("Data 'name' tidak ditemukan.");
+        setErrorMessage("Data pengguna tidak ditemukan.");
+      }
     } catch (error) {
-      console.error("Error fetching user data: " + error);
-      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-      setLoading(false);
+      console.error("Error fetching user data: ", error); // Log kesalahan
+      setErrorMessage("Terjadi kesalahan, mohon login kembali."); // Pesan kesalahan untuk pengguna
+    } finally {
+      setLoading(false); // Pastikan loading dimatikan di akhir
     }
   };
+  
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
