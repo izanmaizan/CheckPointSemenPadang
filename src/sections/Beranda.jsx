@@ -173,8 +173,8 @@ const Beranda = () => {
                       Laporan
                     </button>
                   </Link>
-                  </>
                 </div>
+                  </>
               ) : null}
             </div>
           </>
