@@ -51,11 +51,14 @@ const Laporan = () => {
         setUsername(data.username);
         setRole(data.role);
         localStorage.setItem("username", data.username);
+        
 
-        // Pengecekan role
-        if (data.role === "admin") {
-            fetchReportData();
-            fetchLocations();
+      if (data.role === "admin") {
+        fetchReportData();
+        fetchLocations();
+      } else {
+        handlePetugasData(); // Panggil fungsi untuk role petugas
+      }
         } else {
             setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
             setTimeout(() => navigate("/"), 3000);
@@ -67,6 +70,35 @@ const Laporan = () => {
         setLoading(false); // Pastikan ini ada di sini
     }
 };
+
+
+
+
+const handlePetugasData = async () => {
+  const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+  const selectedTanggal = localStorage.getItem("selectedTanggal");
+
+  if (storedLocation && selectedTanggal) {
+    try {
+      const response = await axios.get(
+        `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
+      setReportData(response.data);
+      setFilteredData(response.data);
+    } catch (error) {
+      console.error("Error fetching petugas data: " + error);
+      setMsg("Gagal memuat data. Coba lagi.");
+    }
+  } else {
+    setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
+  }
+};
+
 
 
   useEffect(() => {
@@ -259,6 +291,10 @@ const Laporan = () => {
         </h1>
 
         <div className="mb-4 flex flex-col md:flex-row justify-between items-center mx-5 gap-2">
+
+
+      {role === "admin" && (
+        <>
           {/* Pencarian berdasarkan No. DO */}
           <div className="flex items-center space-x-2 mb-2 md:mb-0">
             <input
@@ -301,6 +337,8 @@ const Laporan = () => {
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
+          </>
+      )}
 
           {/* Tombol Cetak dan Ekspor */}
           <div className="flex items-center space-x-2">
