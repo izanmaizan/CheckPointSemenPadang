@@ -40,11 +40,14 @@ const Nav = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("refresh_token");
+    localStorage.removeItem("selectedLocation"); // Clear selectedLocation
+    localStorage.removeItem("tanggal"); // Clear tanggal
     setIsAuthenticated(false);
     setName("");
     setRole("");
     navigate("/login");
   };
+  
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -206,6 +209,7 @@ const Nav = () => {
               </li>
             </>
           ) : (
+            <>
             <li>
               <Link
                 to="/check-point"
@@ -214,6 +218,15 @@ const Nav = () => {
                 CheckPoint
               </Link>
             </li>
+              <li>
+                <Link
+                  to="/laporan"
+                  onClick={toggleMenu}
+                  className="text-white hover:text-gray-300 border-b-2 border-transparent hover:border-white transition-all duration-300">
+                  Laporan
+                </Link>
+              </li>
+              </>
           )}
           <li>
             <button
