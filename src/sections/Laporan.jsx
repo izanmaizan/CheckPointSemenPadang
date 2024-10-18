@@ -247,6 +247,13 @@ const fetchReportData = async (lokasi = "", tanggal = "") => {
 
     return pagination;
   };
+  
+
+// Tambahkan kondisi untuk menangani paginasi
+const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+if (totalPages === 0) {
+  return <p>Tidak ada laporan yang ditemukan.</p>;
+}
 
   return (
     <section className="relative px-5 py-16 h-full w-full md:px-20">
