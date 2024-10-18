@@ -33,52 +33,48 @@ const Laporan = () => {
     }
   }, [navigate]);
 
-  const fetchUserData = async () => {
-    setLoading(true); // Tambahkan ini
-    try {
-        const timeout = setTimeout(() => {
-            setErrorMessage("Loading berlangsung lama, mohon login kembali.");
-            setLoading(false);
-        }, 10000);
+  
 
-        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-            },
-        });
+const fetchUserData = async () => {
+  setLoading(true);
+  try {
+    const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+      },
+    });
 
-        clearTimeout(timeout);
-        const data = response.data;
-        setUsername(data.username);
-        setRole(data.role);
-        localStorage.setItem("username", data.username);
-        
+    const data = response.data;
+    setUsername(data.username);
+    setRole(data.role);
+    localStorage.setItem("username", data.username);
 
+    // Jika role petugas, ambil data lokasi dan tanggal dari localStorage
+    if (data.role === "petugas") {
+      const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+      const storedTanggal = localStorage.getItem("tanggal");
 
-      // Jika role petugas, ambil lokasi dan tanggal dari localStorage
-      if (data.role === "petugas") {
-        const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-        const storedTanggal = localStorage.getItem("tanggal");
+      if (storedLocation && storedTanggal) {
+        setSelectedLocation(storedLocation.value);
+        setTanggal(storedTanggal);
 
-        if (storedLocation && storedTanggal) {
-          setSelectedLocation(storedLocation.value);
-          setTanggal(storedTanggal);
-          fetchReportData(storedLocation.value, storedTanggal); // Fetch data terbatas
-        } else {
-          alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
-          navigate("/");
-        }
+        // Panggil fetchReportData dengan parameter yang sesuai
+        fetchReportData(storedLocation.value, storedTanggal);
       } else {
-        fetchReportData(); // Admin melihat semua data
+        alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
+        navigate("/"); // Arahkan kembali ke halaman utama jika tidak ada data
       }
-    } catch (error) {
-        console.error("Error fetching user data: " + error);
-        setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-    } finally {
-        setLoading(false); // Pastikan ini ada di sini
+    } else {
+      // Admin dapat melihat semua data
+      fetchReportData();
     }
+  } catch (error) {
+    console.error("Error fetching user data: " + error);
+    setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+  } finally {
+    setLoading(false);
+  }
 };
-
 
 
 
@@ -114,34 +110,29 @@ const handlePetugasData = async () => {
     handleSearch();
   }, [searchDO, selectedLocation, startDate, endDate]);
 
-  const fetchReportData = async () => {
+  const fetchReportData = async (lokasi = "", tanggal = "") => {
     setLoading(true);
     try {
-      // const response = await axios.get(
-      //   "https://backend-cpsp.vercel.app/laporan",
-      //   {
-      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
-      const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
-
-      let data = response.data;
-
-      // Jika petugas, filter data berdasarkan lokasi dan tanggal
-      if (role === "petugas" && location && date) {
-        data = data.filter(
-          (item) => item.lokasi === location && item.tanggal === date
-        );
-      }
-      setReportData(response.data);
-      setFilteredData(response.data);
+      // Ambil laporan dari endpoint dengan filter jika diperlukan
+      const response = await axios.get(
+        `https://checkpoint-sig.site:3000/laporan?lokasi=${lokasi}&tanggal=${tanggal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
+  
+      const data = response.data;
+  
+      setReportData(data); // Set data laporan yang diambil
+      setFilteredData(data); // Filter langsung data yang sudah diambil
     } catch (error) {
       console.error("Error fetching report data: " + error);
       setMsg("Gagal untuk menampilkan Data. Coba lagi.");
+    } finally {
+      setLoading(false); // Pastikan loading dihentikan
     }
-    setLoading(false);
   };
 
   // Fungsi untuk mengambil data lokasi dari endpoint
