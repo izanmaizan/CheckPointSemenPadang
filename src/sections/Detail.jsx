@@ -51,8 +51,9 @@ const Detail = () => {
       setRole(data.role);
       localStorage.setItem("username", data.username);
   
-      if (data.role === "admin") {
-        await fetchDetailData(); // Pastikan untuk menunggu hasil dari fetchDetailData
+      // Allow both "admin" and "petugas" roles to access the page
+      if (data.role === "admin" || data.role === "petugas") {
+        await fetchDetailData(); // Ensure to wait for fetchDetailData
       } else {
         setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
         setTimeout(() => navigate("/"), 3000);
