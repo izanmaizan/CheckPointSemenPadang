@@ -85,30 +85,35 @@ const Laporan = () => {
   }, []);
   
 
-const handlePetugasData = async () => {
-  const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-  const selectedTanggal = localStorage.getItem("selectedTanggal");
-
-  if (storedLocation && selectedTanggal) {
-    try {
-      const response = await axios.get(
-        `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-          },
-        }
-      );
-      setReportData(response.data);
-      setFilteredData(response.data);
-    } catch (error) {
-      console.error("Error fetching petugas data: " + error);
-      setMsg("Gagal memuat data. Coba lagi.");
+  const handlePetugasData = async () => {
+    const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+    const selectedTanggal = localStorage.getItem("tanggal");
+  
+    if (storedLocation && selectedTanggal) {
+      // Mengatur startDate dan endDate dari tanggal yang dipilih
+      setStartDate(selectedTanggal);
+      setEndDate(selectedTanggal); // Jika Anda hanya ingin satu hari
+  
+      try {
+        const response = await axios.get(
+          `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+            },
+          }
+        );
+        setReportData(response.data);
+        setFilteredData(response.data);
+      } catch (error) {
+        console.error("Error fetching petugas data: " + error);
+        setMsg("Gagal memuat data. Coba lagi.");
+      }
+    } else {
+      setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
     }
-  } else {
-    setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
-  }
-};
+  };
+  
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
