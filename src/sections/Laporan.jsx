@@ -59,10 +59,6 @@ const Laporan = () => {
       } else {
         handlePetugasData(); // Panggil fungsi untuk role petugas
       }
-        } else {
-            setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
-            setTimeout(() => navigate("/"), 3000);
-        }
     } catch (error) {
         console.error("Error fetching user data: " + error);
         setErrorMessage("Terjadi kesalahan, mohon login kembali.");
