@@ -129,6 +129,17 @@ const handlePetugasData = async () => {
 
       const data = response.data;
       setReportData(data);
+      setFilteredData(data); // Inisialisasi filtered data
+    } catch (error) {
+      console.error("Error fetching report data: " + error);
+      setMsg("Gagal untuk menampilkan Data. Coba lagi.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+      const data = response.data;
+      setReportData(data);
       setFilteredData(data); // Initialize filtered data
     } catch (error) {
       console.error("Error fetching report data: " + error);
