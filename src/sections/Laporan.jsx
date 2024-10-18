@@ -34,46 +34,53 @@ const Laporan = () => {
   }, [navigate]);
 
   
-
-const fetchUserData = async () => {
-  setLoading(true);
-  try {
-    const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-      },
-    });
-
-    const data = response.data;
-    setUsername(data.username);
-    setRole(data.role);
-    localStorage.setItem("username", data.username);
-
-    if (data.role === "petugas") {
-      const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-      const storedTanggal = localStorage.getItem("tanggal");
-
-      if (storedLocation && storedTanggal) {
-        setSelectedLocation(storedLocation.label); // Store label for better readability
-        setTanggal(storedTanggal);
-
-        // Fetch report data with location and date
-        fetchReportData(storedLocation.value, storedTanggal);
+  const fetchUserData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
+  
+      const data = response.data;
+      setUsername(data.username);
+      setRole(data.role);
+      localStorage.setItem("username", data.username);
+  
+      // Fetch locations data for admin role
+      await fetchLocations();
+  
+      if (data.role === "petugas") {
+        const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+        const storedTanggal = localStorage.getItem("tanggal");
+  
+        if (storedLocation && storedTanggal) {
+          setSelectedLocation(storedLocation.label); // Store label for better readability
+          setTanggal(storedTanggal);
+  
+          // Fetch report data with location and date
+          fetchReportData(storedLocation.value, storedTanggal);
+        } else {
+          alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
+          navigate("/"); // Redirect if no data found
+        }
       } else {
-        alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
-        navigate("/"); // Redirect if no data found
+        // Admin can see all data
+        fetchReportData();
       }
-    } else {
-      // Admin can see all data
-      fetchReportData();
+    } catch (error) {
+      console.error("Error fetching user data: " + error);
+      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Error fetching user data: " + error);
-    setErrorMessage("Terjadi kesalahan, mohon login kembali.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
+  useEffect(() => {
+    fetchLocations(); // Ambil data lokasi saat komponen di-mount
+  }, []);
+  
 
 
 
