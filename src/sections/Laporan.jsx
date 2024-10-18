@@ -115,8 +115,6 @@ const handlePetugasData = async () => {
     handleSearch();
   }, [searchDO, selectedLocation, startDate, endDate]);
 
-  
-
   const fetchReportData = async (lokasi = "", tanggal = "") => {
     setLoading(true);
     try {
@@ -131,7 +129,7 @@ const handlePetugasData = async () => {
 
       const data = response.data;
       setReportData(data);
-      setFilteredData(data); // Inisialisasi filtered data
+      setFilteredData(data); // Initialize filtered data
     } catch (error) {
       console.error("Error fetching report data: " + error);
       setMsg("Gagal untuk menampilkan Data. Coba lagi.");
