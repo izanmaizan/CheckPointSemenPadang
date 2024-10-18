@@ -52,14 +52,13 @@ const Laporan = () => {
         setRole(data.role);
         localStorage.setItem("username", data.username);
 
+        // Pengecekan role
         if (data.role === "admin") {
-          fetchReportData(); // Jika admin, ambil semua data
-          fetchLocations();
-        } else if (data.role === "petugas") {
-          fetchDataForPetugas(); // Ambil data berdasarkan lokasi dan tanggal di localStorage
+            fetchReportData();
+            fetchLocations();
         } else {
-          setMsg("Anda tidak punya akses ke halaman ini. Kembali ke Beranda...");
-          setTimeout(() => navigate("/"), 3000);
+            setMsg("Anda tidak punya akses ke halaman ini. Dikembalikan ke Halaman Utama...");
+            setTimeout(() => navigate("/"), 3000);
         }
     } catch (error) {
         console.error("Error fetching user data: " + error);
@@ -68,37 +67,6 @@ const Laporan = () => {
         setLoading(false); // Pastikan ini ada di sini
     }
 };
-
-
-
-  // Fungsi untuk mengambil data laporan berdasarkan lokasi dan tanggal di localStorage
-  const fetchDataForPetugas = async () => {
-    try {
-      const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-      const storedStartDate = localStorage.getItem("startDate");
-      const storedEndDate = localStorage.getItem("endDate");
-
-      const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
-
-      const data = response.data;
-      // Filter data berdasarkan lokasi dan tanggal dari localStorage
-      const filtered = data.filter((item) => 
-        item.lokasi === storedLocation.value &&
-        new Date(item.tanggal) >= new Date(storedStartDate) &&
-        new Date(item.tanggal) <= new Date(storedEndDate)
-      );
-
-      setReportData(filtered);
-      setFilteredData(filtered);
-    } catch (error) {
-      console.error("Error fetching data for petugas: " + error);
-      setMsg("Gagal menampilkan data. Coba lagi.");
-    }
-  };
 
 
   useEffect(() => {
