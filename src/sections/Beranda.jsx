@@ -162,7 +162,7 @@ const Beranda = () => {
                 </>
               ) : role === "petugas" ? (
                 <>
-                <div className="col-span-2">
+                <div className="col-span-3 gap-4 max-w-lg grid grid-cols-2">
                   <Link to="/check-point">
                     <button className="text-white bg-[#0e7490] hover:bg-[#0c647a] focus:ring-4 focus:outline-none focus:ring-[#0c647a] font-medium rounded-lg text-sm w-full px-5 py-4 transition-all">
                       Check Point
