@@ -40,6 +40,9 @@ const Nav = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("refresh_token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    localStorage.removeItem("name");
     localStorage.removeItem("selectedLocation"); // Clear selectedLocation
     localStorage.removeItem("tanggal"); // Clear tanggal
     setIsAuthenticated(false);
