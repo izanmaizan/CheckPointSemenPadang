@@ -49,23 +49,22 @@ const fetchUserData = async () => {
     setRole(data.role);
     localStorage.setItem("username", data.username);
 
-    // Jika role petugas, ambil data lokasi dan tanggal dari localStorage
     if (data.role === "petugas") {
       const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
       const storedTanggal = localStorage.getItem("tanggal");
 
       if (storedLocation && storedTanggal) {
-        setSelectedLocation(storedLocation.value);
+        setSelectedLocation(storedLocation.label); // Store label for better readability
         setTanggal(storedTanggal);
 
-        // Panggil fetchReportData dengan parameter yang sesuai
+        // Fetch report data with location and date
         fetchReportData(storedLocation.value, storedTanggal);
       } else {
         alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
-        navigate("/"); // Arahkan kembali ke halaman utama jika tidak ada data
+        navigate("/"); // Redirect if no data found
       }
     } else {
-      // Admin dapat melihat semua data
+      // Admin can see all data
       fetchReportData();
     }
   } catch (error) {
