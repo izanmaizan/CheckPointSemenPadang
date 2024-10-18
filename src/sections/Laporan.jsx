@@ -62,7 +62,7 @@ const Laporan = () => {
           // Fetch report data with location and date
           fetchReportData(storedLocation.value, storedTanggal);
         } else {
-          alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
+          setMsg("Anda hanya bisa melihat Laporan ini saat sudah melakukan Check Point.");
           navigate("/"); // Redirect if no data found
         }
       } else {
