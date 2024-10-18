@@ -43,33 +43,39 @@ const Laporan = () => {
       });
   
       const data = response.data;
-      setUsername(data.username);
-      setRole(data.role);
-      localStorage.setItem("username", data.username);
   
-      // Fetch locations data for admin role
-      await fetchLocations();
+      // Memastikan data yang diharapkan ada
+      if (data.username && data.role) {
+        setUsername(data.username);
+        setRole(data.role);
+        localStorage.setItem("username", data.username);
+        
+        // Ambil data lokasi untuk peran admin
+        await fetchLocations();
   
-      if (data.role === "petugas") {
-        const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-        const storedTanggal = localStorage.getItem("tanggal");
+        if (data.role === "petugas") {
+          const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+          const storedTanggal = localStorage.getItem("tanggal");
   
-        if (storedLocation && storedTanggal) {
-          setSelectedLocation(storedLocation.label); // Store label for better readability
-          setTanggal(storedTanggal);
+          if (storedLocation && storedTanggal) {
+            setSelectedLocation(storedLocation.label); // Menyimpan label untuk keterbacaan yang lebih baik
+            setTanggal(storedTanggal);
   
-          // Fetch report data with location and date
-          fetchReportData(storedLocation.value, storedTanggal);
+            // Ambil data laporan dengan lokasi dan tanggal
+            fetchReportData(storedLocation.value, storedTanggal);
+          } else {
+            // Set pesan dan jeda sebelum mengalihkan
+            setMsg("Anda hanya bisa melihat Laporan ini saat sudah melakukan Check Point.");
+            setTimeout(() => {
+              navigate("/"); // Redirect setelah 3 detik
+            }, 3000);
+          }
         } else {
-          // Set message and delay before redirecting
-          setMsg("Anda hanya bisa melihat Laporan ini saat sudah melakukan Check Point.");
-          setTimeout(() => {
-            navigate("/"); // Redirect after 3 seconds
-          }, 3000);
+          // Admin dapat melihat semua data
+          fetchReportData();
         }
       } else {
-        // Admin can see all data
-        fetchReportData();
+        setErrorMessage("Data pengguna tidak valid.");
       }
     } catch (error) {
       console.error("Error fetching user data: " + error);
@@ -78,6 +84,7 @@ const Laporan = () => {
       setLoading(false);
     }
   };
+  
   
   
   useEffect(() => {
@@ -136,7 +143,7 @@ const handlePetugasData = async () => {
     } finally {
       setLoading(false);
     }
-  };
+};
 
   // Fungsi untuk mengambil data lokasi dari endpoint
   const fetchLocations = async () => {
