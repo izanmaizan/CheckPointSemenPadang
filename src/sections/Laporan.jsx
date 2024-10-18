@@ -14,6 +14,7 @@ const Laporan = () => {
   const [searchDO, setSearchDO] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [locations, setLocations] = useState([]); // State untuk menyimpan data lokasi
+  const [tanggal, setTanggal] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,11 +54,22 @@ const Laporan = () => {
         localStorage.setItem("username", data.username);
         
 
-      if (data.role === "admin") {
-        fetchReportData();
-        fetchLocations();
+
+      // Jika role petugas, ambil lokasi dan tanggal dari localStorage
+      if (data.role === "petugas") {
+        const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+        const storedTanggal = localStorage.getItem("tanggal");
+
+        if (storedLocation && storedTanggal) {
+          setSelectedLocation(storedLocation.value);
+          setTanggal(storedTanggal);
+          fetchReportData(storedLocation.value, storedTanggal); // Fetch data terbatas
+        } else {
+          alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
+          navigate("/");
+        }
       } else {
-        handlePetugasData(); // Panggil fungsi untuk role petugas
+        fetchReportData(); // Admin melihat semua data
       }
     } catch (error) {
         console.error("Error fetching user data: " + error);
@@ -114,6 +126,15 @@ const handlePetugasData = async () => {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
       });
+
+      let data = response.data;
+
+      // Jika petugas, filter data berdasarkan lokasi dan tanggal
+      if (role === "petugas" && location && date) {
+        data = data.filter(
+          (item) => item.lokasi === location && item.tanggal === date
+        );
+      }
       setReportData(response.data);
       setFilteredData(response.data);
     } catch (error) {
