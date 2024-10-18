@@ -33,7 +33,6 @@ const Laporan = () => {
     }
   }, [navigate]);
 
-  
   const fetchUserData = async () => {
     setLoading(true);
     try {
@@ -62,8 +61,11 @@ const Laporan = () => {
           // Fetch report data with location and date
           fetchReportData(storedLocation.value, storedTanggal);
         } else {
+          // Set message and delay before redirecting
           setMsg("Anda hanya bisa melihat Laporan ini saat sudah melakukan Check Point.");
-          navigate("/"); // Redirect if no data found
+          setTimeout(() => {
+            navigate("/"); // Redirect after 3 seconds
+          }, 3000);
         }
       } else {
         // Admin can see all data
@@ -76,6 +78,7 @@ const Laporan = () => {
       setLoading(false);
     }
   };
+  
   
   useEffect(() => {
     fetchLocations(); // Ambil data lokasi saat komponen di-mount
