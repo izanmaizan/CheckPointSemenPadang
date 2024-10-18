@@ -548,7 +548,7 @@ const handlePetugasData = async () => {
 
           {/* Page Info */}
           <div className="text-gray-700">
-            Page {currentPage} of {totalPages}
+            Halaman ke {currentPage} dari {totalPages}
           </div>
         </div>
       </div>
