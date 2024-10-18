@@ -49,22 +49,23 @@ const fetchUserData = async () => {
     setRole(data.role);
     localStorage.setItem("username", data.username);
 
+    // Jika role petugas, ambil data lokasi dan tanggal dari localStorage
     if (data.role === "petugas") {
       const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
       const storedTanggal = localStorage.getItem("tanggal");
 
       if (storedLocation && storedTanggal) {
-        setSelectedLocation(storedLocation.label); // Store label for better readability
+        setSelectedLocation(storedLocation.value);
         setTanggal(storedTanggal);
 
-        // Fetch report data with location and date
+        // Panggil fetchReportData dengan parameter yang sesuai
         fetchReportData(storedLocation.value, storedTanggal);
       } else {
         alert("Data lokasi atau tanggal tidak ditemukan di localStorage.");
-        navigate("/"); // Redirect if no data found
+        navigate("/"); // Arahkan kembali ke halaman utama jika tidak ada data
       }
     } else {
-      // Admin can see all data
+      // Admin dapat melihat semua data
       fetchReportData();
     }
   } catch (error) {
@@ -108,11 +109,11 @@ const handlePetugasData = async () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     handleSearch();
   }, [searchDO, selectedLocation, startDate, endDate]);
-  };
 
   const fetchReportData = async (lokasi = "", tanggal = "") => {
     setLoading(true);
     try {
+      // Ambil laporan dari endpoint dengan filter jika diperlukan
       const response = await axios.get(
         `https://checkpoint-sig.site:3000/laporan?lokasi=${lokasi}&tanggal=${tanggal}`,
         {
@@ -121,15 +122,16 @@ const handlePetugasData = async () => {
           },
         }
       );
-
+  
       const data = response.data;
-      setReportData(data);
-      setFilteredData(data); // Initialize filtered data
+  
+      setReportData(data); // Set data laporan yang diambil
+      setFilteredData(data); // Filter langsung data yang sudah diambil
     } catch (error) {
       console.error("Error fetching report data: " + error);
       setMsg("Gagal untuk menampilkan Data. Coba lagi.");
     } finally {
-      setLoading(false);
+      setLoading(false); // Pastikan loading dihentikan
     }
   };
 
