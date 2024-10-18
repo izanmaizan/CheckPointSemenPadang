@@ -369,6 +369,7 @@ const Detail = () => {
               <input
                 type="text"
                 value={detailData.geofence_data}
+                disabled
                 onChange={(e) =>
                   setDetailData({
                     ...detailData,
