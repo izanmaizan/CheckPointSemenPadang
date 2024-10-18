@@ -76,13 +76,11 @@ const Laporan = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchLocations(); // Ambil data lokasi saat komponen di-mount
   }, []);
   
-
-
 
 const handlePetugasData = async () => {
   const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
