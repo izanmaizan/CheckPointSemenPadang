@@ -164,40 +164,41 @@ const Laporan = () => {
   // Handle search and filtering
   const handleSearch = () => {
     let filtered = reportData;
-
-    // Filter based on No. DO
+  
+    // Filter berdasarkan No. DO
     if (searchDO) {
       filtered = filtered.filter((item) => item.no_do.includes(searchDO));
     }
-
-    // Filter based on selected location
+  
+    // Filter berdasarkan lokasi yang dipilih
     if (selectedLocation) {
       filtered = filtered.filter((item) => item.lokasi === selectedLocation);
     }
-
+  
     // Convert dates from DD-MM-YYYY to YYYY-MM-DD for comparison
     const formatDate = (dateString) => {
       const [day, month, year] = dateString.split("-");
       return `${year}-${month}-${day}`;
     };
-
-    // Filter based on start date
+  
+    // Filter berdasarkan start date
     if (startDate) {
       filtered = filtered.filter(
-        (item) => new Date(formatDate(item.tanggal)) >= new Date(startDate)
+        (item) => new Date(formatDate(item.tanggal)) >= new Date(formatDate(startDate))
       );
     }
-
-    // Filter based on end date
+  
+    // Filter berdasarkan end date
     if (endDate) {
       filtered = filtered.filter(
-        (item) => new Date(formatDate(item.tanggal)) <= new Date(endDate)
+        (item) => new Date(formatDate(item.tanggal)) <= new Date(formatDate(endDate))
       );
     }
-
+  
     setFilteredData(filtered);
-    setCurrentPage(1); // Reset to first page after filtering
+    setCurrentPage(1); // Reset ke halaman pertama setelah filtering
   };
+  
 
   
 
