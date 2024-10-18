@@ -85,35 +85,30 @@ const Laporan = () => {
   }, []);
   
 
-  const handlePetugasData = async () => {
-    const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-    const selectedTanggal = localStorage.getItem("tanggal");
-  
-    if (storedLocation && selectedTanggal) {
-      // Mengatur startDate dan endDate dari tanggal yang dipilih
-      setStartDate(selectedTanggal);
-      setEndDate(selectedTanggal); // Jika Anda hanya ingin satu hari
-  
-      try {
-        const response = await axios.get(
-          `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-            },
-          }
-        );
-        setReportData(response.data);
-        setFilteredData(response.data);
-      } catch (error) {
-        console.error("Error fetching petugas data: " + error);
-        setMsg("Gagal memuat data. Coba lagi.");
-      }
-    } else {
-      setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
+const handlePetugasData = async () => {
+  const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+  const selectedTanggal = localStorage.getItem("selectedTanggal");
+
+  if (storedLocation && selectedTanggal) {
+    try {
+      const response = await axios.get(
+        `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
+      setReportData(response.data);
+      setFilteredData(response.data);
+    } catch (error) {
+      console.error("Error fetching petugas data: " + error);
+      setMsg("Gagal memuat data. Coba lagi.");
     }
-  };
-  
+  } else {
+    setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
+  }
+};
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -164,41 +159,40 @@ const Laporan = () => {
   // Handle search and filtering
   const handleSearch = () => {
     let filtered = reportData;
-  
-    // Filter berdasarkan No. DO
+
+    // Filter based on No. DO
     if (searchDO) {
       filtered = filtered.filter((item) => item.no_do.includes(searchDO));
     }
-  
-    // Filter berdasarkan lokasi yang dipilih
+
+    // Filter based on selected location
     if (selectedLocation) {
       filtered = filtered.filter((item) => item.lokasi === selectedLocation);
     }
-  
+
     // Convert dates from DD-MM-YYYY to YYYY-MM-DD for comparison
     const formatDate = (dateString) => {
       const [day, month, year] = dateString.split("-");
       return `${year}-${month}-${day}`;
     };
-  
-    // Filter berdasarkan start date
+
+    // Filter based on start date
     if (startDate) {
       filtered = filtered.filter(
-        (item) => new Date(formatDate(item.tanggal)) >= new Date(formatDate(startDate))
+        (item) => new Date(formatDate(item.tanggal)) >= new Date(startDate)
       );
     }
-  
-    // Filter berdasarkan end date
+
+    // Filter based on end date
     if (endDate) {
       filtered = filtered.filter(
-        (item) => new Date(formatDate(item.tanggal)) <= new Date(formatDate(endDate))
+        (item) => new Date(formatDate(item.tanggal)) <= new Date(endDate)
       );
     }
-  
+
     setFilteredData(filtered);
-    setCurrentPage(1); // Reset ke halaman pertama setelah filtering
+    setCurrentPage(1); // Reset to first page after filtering
   };
-  
 
   
 
