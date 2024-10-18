@@ -24,19 +24,14 @@ const Laporan = () => {
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refresh_token");
-  
+
     if (refreshToken) {
+      // Panggil fetchUserData untuk mendapatkan role dari server
       fetchUserData();
     } else {
       navigate("/login");
     }
-  
-    // Panggil handlePetugasData untuk mengambil data laporan berdasarkan tanggal
-    if (role === "petugas") {
-      handlePetugasData();
-    }
-  }, [navigate, role]); // Tambahkan role sebagai dependensi
-  
+  }, [navigate]);
 
   const fetchUserData = async () => {
     setLoading(true);
@@ -90,37 +85,30 @@ const Laporan = () => {
   }, []);
   
 
-  const handlePetugasData = async () => {
-    const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
-    const storedTanggal = localStorage.getItem("tanggal"); // Ambil tanggal dari localStorage
-  
-    if (storedLocation && storedTanggal) {
-      try {
-        // Menggunakan storedTanggal untuk memfilter data
-        const response = await axios.get(
-          `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${storedTanggal}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-            },
-          }
-        );
-        setReportData(response.data);
-        setFilteredData(response.data); // Menyimpan data yang diambil ke filteredData
-      } catch (error) {
-        console.error("Error fetching petugas data: " + error);
-        setMsg("Gagal memuat data. Coba lagi.");
-      }
-    } else {
-      setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
+const handlePetugasData = async () => {
+  const storedLocation = JSON.parse(localStorage.getItem("selectedLocation"));
+  const selectedTanggal = localStorage.getItem("selectedTanggal");
+
+  if (storedLocation && selectedTanggal) {
+    try {
+      const response = await axios.get(
+        `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
+      setReportData(response.data);
+      setFilteredData(response.data);
+    } catch (error) {
+      console.error("Error fetching petugas data: " + error);
+      setMsg("Gagal memuat data. Coba lagi.");
     }
-  };
-  
-  // Panggil handlePetugasData di dalam fetchUserData jika role adalah "petugas"
-  if (data.role === "petugas") {
-    handlePetugasData(); // Panggil fungsi ini untuk mengambil data laporan petugas
+  } else {
+    setMsg("Tidak ada lokasi atau tanggal yang dipilih.");
   }
-  
+};
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
