@@ -112,7 +112,6 @@ const handlePetugasData = async () => {
   const fetchReportData = async (lokasi = "", tanggal = "") => {
     setLoading(true);
     try {
-      // Ambil laporan dari endpoint dengan filter jika diperlukan
       const response = await axios.get(
         `https://checkpoint-sig.site:3000/laporan?lokasi=${lokasi}&tanggal=${tanggal}`,
         {
@@ -121,16 +120,15 @@ const handlePetugasData = async () => {
           },
         }
       );
-  
+
       const data = response.data;
-  
-      setReportData(data); // Set data laporan yang diambil
-      setFilteredData(data); // Filter langsung data yang sudah diambil
+      setReportData(data);
+      setFilteredData(data); // Initialize filtered data
     } catch (error) {
       console.error("Error fetching report data: " + error);
       setMsg("Gagal untuk menampilkan Data. Coba lagi.");
     } finally {
-      setLoading(false); // Pastikan loading dihentikan
+      setLoading(false);
     }
   };
 
@@ -152,29 +150,34 @@ const handlePetugasData = async () => {
       setMsg("Gagal memuat Lokasi. Coba lagi.");
     }
   };
-
+  // Handle search and filtering
   const handleSearch = () => {
     let filtered = reportData;
 
+    // Filter based on No. DO
     if (searchDO) {
       filtered = filtered.filter((item) => item.no_do.includes(searchDO));
     }
 
+    // Filter based on selected location
     if (selectedLocation) {
       filtered = filtered.filter((item) => item.lokasi === selectedLocation);
     }
 
+    // Convert dates from DD-MM-YYYY to YYYY-MM-DD for comparison
     const formatDate = (dateString) => {
       const [day, month, year] = dateString.split("-");
       return `${year}-${month}-${day}`;
     };
 
+    // Filter based on start date
     if (startDate) {
       filtered = filtered.filter(
         (item) => new Date(formatDate(item.tanggal)) >= new Date(startDate)
       );
     }
 
+    // Filter based on end date
     if (endDate) {
       filtered = filtered.filter(
         (item) => new Date(formatDate(item.tanggal)) <= new Date(endDate)
@@ -182,8 +185,15 @@ const handlePetugasData = async () => {
     }
 
     setFilteredData(filtered);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page after filtering
   };
+
+  
+
+  // Use Effect to run search when filters change
+  useEffect(() => {
+    handleSearch();
+  }, [searchDO, selectedLocation, startDate, endDate, reportData]);
 
   const handlePrint = () => {
     window.print();
@@ -206,22 +216,18 @@ const handlePetugasData = async () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const generatePagination = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const pagination = [];
+    pagination.push(1); // Always show first page
 
-    // Always show the first page
-    pagination.push(1);
-
-    // If currentPage is far from the first page, add ellipsis
     if (currentPage > 3) {
       pagination.push("...");
     }
 
-    // Show up to 2 pages before and after the current page
     const startPage = Math.max(2, currentPage - 1);
     const endPage = Math.min(totalPages - 1, currentPage + 1);
 
@@ -229,12 +235,10 @@ const handlePetugasData = async () => {
       pagination.push(i);
     }
 
-    // If currentPage is far from the last page, add ellipsis
     if (currentPage < totalPages - 2) {
       pagination.push("...");
     }
 
-    // Always show the last page
     if (totalPages > 1) {
       pagination.push(totalPages);
     }
