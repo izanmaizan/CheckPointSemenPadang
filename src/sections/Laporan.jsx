@@ -23,43 +23,53 @@ const Laporan = () => {
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refresh_token");
+
     if (refreshToken) {
-      fetchUserData(); // Panggil fungsi untuk mendapatkan data pengguna
+      // Panggil fetchUserData untuk mendapatkan role dari server
+      fetchUserData();
     } else {
       navigate("/login");
     }
   }, [navigate]);
 
   const fetchUserData = async () => {
-    setLoading(true);
+    setLoading(true); // Tambahkan ini
     try {
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
-        },
-      });
+        const timeout = setTimeout(() => {
+            setErrorMessage("Loading berlangsung lama, mohon login kembali.");
+            setLoading(false);
+        }, 10000);
 
-      const data = response.data;
-      setUsername(data.username);
-      setRole(data.role); // Simpan role
-      localStorage.setItem("username", data.username);
+        const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+            },
+        });
 
-      if (data.role === "admin") {
-        fetchReportData(); // Jika admin, ambil semua data
-        fetchLocations();
-      } else if (data.role === "petugas") {
-        fetchDataForPetugas(); // Ambil data berdasarkan lokasi dan tanggal di localStorage
-      } else {
-        setMsg("Anda tidak punya akses ke halaman ini. Kembali ke Beranda...");
-        setTimeout(() => navigate("/"), 3000);
-      }
+        clearTimeout(timeout);
+        const data = response.data;
+        setUsername(data.username);
+        setRole(data.role);
+        localStorage.setItem("username", data.username);
+
+        if (data.role === "admin") {
+          fetchReportData(); // Jika admin, ambil semua data
+          fetchLocations();
+        } else if (data.role === "petugas") {
+          fetchDataForPetugas(); // Ambil data berdasarkan lokasi dan tanggal di localStorage
+        } else {
+          setMsg("Anda tidak punya akses ke halaman ini. Kembali ke Beranda...");
+          setTimeout(() => navigate("/"), 3000);
+        }
     } catch (error) {
-      console.error("Error fetching user data: " + error);
-      setErrorMessage("Terjadi kesalahan, mohon login kembali.");
+        console.error("Error fetching user data: " + error);
+        setErrorMessage("Terjadi kesalahan, mohon login kembali.");
     } finally {
-      setLoading(false);
+        setLoading(false); // Pastikan ini ada di sini
     }
-  };
+};
+
+
 
   // Fungsi untuk mengambil data laporan berdasarkan lokasi dan tanggal di localStorage
   const fetchDataForPetugas = async () => {
@@ -90,9 +100,19 @@ const Laporan = () => {
     }
   };
 
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    handleSearch();
+  }, [searchDO, selectedLocation, startDate, endDate]);
+
   const fetchReportData = async () => {
     setLoading(true);
     try {
+      // const response = await axios.get(
+      //   "https://backend-cpsp.vercel.app/laporan",
+      //   {
+      // const response = await axios.get("http://193.203.162.80:3000/laporan", {
       const response = await axios.get("https://checkpoint-sig.site:3000/laporan", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -102,9 +122,28 @@ const Laporan = () => {
       setFilteredData(response.data);
     } catch (error) {
       console.error("Error fetching report data: " + error);
-      setMsg("Gagal menampilkan data. Coba lagi.");
+      setMsg("Gagal untuk menampilkan Data. Coba lagi.");
     }
     setLoading(false);
+  };
+
+  // Fungsi untuk mengambil data lokasi dari endpoint
+  const fetchLocations = async () => {
+    try {
+      // const response = await axios.get(
+      //   "https://backend-cpsp.vercel.app/titiklokasi",
+      //   {
+      // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
+      const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+        },
+      });
+      setLocations(response.data); // Menyimpan data lokasi yang diterima ke state
+    } catch (error) {
+      console.error("Error fetching locations: " + error);
+      setMsg("Gagal memuat Lokasi. Coba lagi.");
+    }
   };
 
   const handleSearch = () => {
@@ -139,11 +178,61 @@ const Laporan = () => {
     setCurrentPage(1);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const handleExportExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
     XLSX.writeFile(workbook, "Laporan_Check_Point.xlsx");
+  };
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const currentData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredData.slice(startIndex, endIndex);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
+  };
+
+  const generatePagination = () => {
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    const pagination = [];
+
+    // Always show the first page
+    pagination.push(1);
+
+    // If currentPage is far from the first page, add ellipsis
+    if (currentPage > 3) {
+      pagination.push("...");
+    }
+
+    // Show up to 2 pages before and after the current page
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pagination.push(i);
+    }
+
+    // If currentPage is far from the last page, add ellipsis
+    if (currentPage < totalPages - 2) {
+      pagination.push("...");
+    }
+
+    // Always show the last page
+    if (totalPages > 1) {
+      pagination.push(totalPages);
+    }
+
+    return pagination;
   };
 
   return (
