@@ -37,7 +37,7 @@ const TambahPetugas = ({
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -75,7 +75,7 @@ const TambahPetugas = ({
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi");
+      const response = await axios.get("http://localhost:3000/titiklokasi");
       setLocations(response.data);
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -125,14 +125,14 @@ const TambahPetugas = ({
       if (isEdit) {
         // Edit existing petugas
         await axios.put(
-          `https://checkpoint-sig.site:3000/petugas/${petugasToEdit.id_petugas}`,
+          `http://localhost:3000/petugas/${petugasToEdit.id_petugas}`,
           petugasData[0]
         );
         alert("Petugas berhasil diperbarui!");
       } else {
         // Add new petugas
         await axios.post(
-          "https://checkpoint-sig.site:3000/petugas",
+          "http://localhost:3000/petugas",
           petugasData
         );
         alert("Petugas berhasil ditambahkan!");

@@ -31,7 +31,7 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
         setLoading(false);
       }, 10000);
 
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -78,13 +78,13 @@ const TambahLokasi = ({ location, onClose, onSuccess }) => {
     try {
       if (isEditing) {
         // Update existing location
-        await axios.put(`https://checkpoint-sig.site:3000/titiklokasi/${location.id_lokasi}`, {
+        await axios.put(`http://localhost:3000/titiklokasi/${location.id_lokasi}`, {
           lokasi,
         });
         alert("Lokasi berhasil di Perbarui!");
       } else {
         // Add new location (id_lokasi is generated in the backend)
-        await axios.post("https://checkpoint-sig.site:3000/titiklokasi", {
+        await axios.post("http://localhost:3000/titiklokasi", {
           lokasi,
         });
         alert("Lokasi berhasil ditambahkan!");

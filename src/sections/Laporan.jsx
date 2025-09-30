@@ -36,7 +36,7 @@ const Laporan = () => {
   const fetchUserData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },
@@ -92,7 +92,7 @@ const handlePetugasData = async () => {
   if (storedLocation && selectedTanggal) {
     try {
       const response = await axios.get(
-        `https://checkpoint-sig.site:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
+        `http://localhost:3000/laporan?lokasi=${storedLocation.value}&tanggal=${selectedTanggal}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -119,7 +119,7 @@ const handlePetugasData = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://checkpoint-sig.site:3000/laporan?lokasi=${lokasi}&tanggal=${tanggal}`,
+        `http://localhost:3000/laporan?lokasi=${lokasi}&tanggal=${tanggal}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
@@ -145,7 +145,7 @@ const handlePetugasData = async () => {
       //   "https://backend-cpsp.vercel.app/titiklokasi",
       //   {
       // const response = await axios.get("http://193.203.162.80:3000/titiklokasi", {
-      const response = await axios.get("https://checkpoint-sig.site:3000/titiklokasi", {
+      const response = await axios.get("http://localhost:3000/titiklokasi", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

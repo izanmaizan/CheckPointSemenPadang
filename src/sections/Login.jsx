@@ -23,12 +23,12 @@ const Login = () => {
     } else {
       try {
         // server public
-        const response = await axios.post(
+        // const response = await axios.post(
           // "http://193.203.162.80:3000/login", 
-          "https://checkpoint-sig.site:3000/login", 
-          {
+          // "https://checkpoint-sig.site:3000/login", 
+          // {
             // server local
-            // const response = await axios.post("http://localhost:3000/login", {
+            const response = await axios.post("http://localhost:3000/login", {
             username: username,
             password: password,
           },

@@ -56,7 +56,8 @@ const Beranda = () => {
 
       // const response = await axios.get("https://backend-cpsp.vercel.app/me", {
       // const response = await axios.get("http://193.203.162.80:3000/me", {
-      const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      // const response = await axios.get("https://checkpoint-sig.site:3000/me", {
+      const response = await axios.get("http://localhost:3000/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
         },

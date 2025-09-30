@@ -21,9 +21,9 @@ const Daftar = () => {
       return;
     } else {
       try {
-        await axios.post("http://193.203.162.80:3000/register", {
+        // await axios.post("http://193.203.162.80:3000/register", {
           //ini untuk deploy
-          // await axios.post("http://localhost:3000/register", {
+          await axios.post("http://localhost:3000/register", {
           username: username,
           email: email,
           password: password,
